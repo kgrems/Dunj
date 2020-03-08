@@ -1,0 +1,1 @@
+player_weapon1_headarmor_bodyarmor_legarmor_direction

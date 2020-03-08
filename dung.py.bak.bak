@@ -1,0 +1,281 @@
+#http://usingpython.com/events/
+import pygame, sys, random, time
+
+from item import *
+from player import *
+from level import *
+
+from pygame.locals import *
+
+pygame.mixer.pre_init(44100, -16, 1, 512)
+pygame.init()
+
+
+BLACK = (0,   0,   0  )
+BROWN = (153, 76,  0  )
+GREEN = (0,   255, 0  )
+BLUE  = (0,   0,   255)
+GREY  = (100, 100, 100)
+RED   = (255, 0,   0  )
+
+DIRT  = 0
+GRASS = 1
+WATER = 2
+COAL  = 3
+ROCK  = 4
+LAVA  = 5
+
+#0 - load from file
+#1 - random generation
+map_mode = 0   
+   
+#(filename, passable)   
+         
+textures = {
+                DIRT  : (pygame.image.load('images/ground/dirt.png'), 1),
+                GRASS : (pygame.image.load('images/ground/grass.png'), 1),
+                WATER : (pygame.image.load('images/ground/water.png'), 0),
+                COAL  : (pygame.image.load('images/ground/coal.png'), 0),
+                ROCK  : (pygame.image.load('images/ground/rock.png'), 0),
+                LAVA  : (pygame.image.load('images/ground/lava.png'), 0)
+           } 
+           
+TILESIZE  = 40
+MAPWIDTH  = 40
+MAPHEIGHT = 18
+
+HUD_HEIGHT = 4
+
+FPS = 30
+fpsClock = pygame.time.Clock()
+
+VEL = 1
+
+player_turn = True
+
+collect_sound = pygame.mixer.Sound("sounds/collect_coin_01.wav")
+
+actionKeyPressed = False
+
+#convenience array for ground tiles
+resources = [DIRT, GRASS, WATER, COAL, ROCK, LAVA]
+
+#fill the tilemap with DIRT
+tilemap = [ [None for w in range(MAPWIDTH)] for h in range(MAPHEIGHT) ] 
+
+level1 = Level("1.lvl",MAPWIDTH,MAPHEIGHT,TILESIZE)
+
+DISPLAYSURF = pygame.display.set_mode((MAPWIDTH*TILESIZE,MAPHEIGHT*TILESIZE + HUD_HEIGHT*TILESIZE))
+FAVICON = pygame.image.load('images/misc/favicon.png').convert_alpha()
+
+pygame.display.set_icon(FAVICON)
+
+pygame.display.set_caption('Dung')
+
+PLEASE_WAIT = pygame.image.load('images/misc/please_wait.png').convert_alpha()
+MOVE_INDICATOR = pygame.image.load('images/misc/move_indicator.png').convert_alpha()
+
+
+HUD_LOWER = pygame.image.load('images/misc/hud_lower.png').convert_alpha()
+HUD_LEFT_PADDING = 25
+HUD_SYSTEM_PADDING = 1186
+HUD_MOVES_PADDING = 938
+HUD_TITLE_HEIGHT = 40
+HUD_STAT_C1_PADDING = HUD_LEFT_PADDING + 60
+HUD_STAT_C2_PADDING = HUD_STAT_C1_PADDING + 180
+HUD_STAT_GAP = 18
+
+PLAYER_B_U = pygame.image.load('images/player/base/player_u.png').convert_alpha()
+PLAYER_B_D = pygame.image.load('images/player/base/player_d.png').convert_alpha()
+PLAYER_B_L = pygame.image.load('images/player/base/player_l.png').convert_alpha()
+PLAYER_B_R = pygame.image.load('images/player/base/player_r.png').convert_alpha()
+
+PLAYER_S1_U = pygame.image.load('images/player/base_s1/player_s1_u.png').convert_alpha()
+PLAYER_S1_D = pygame.image.load('images/player/base_s1/player_s1_d.png').convert_alpha()
+PLAYER_S1_L = pygame.image.load('images/player/base_s1/player_s1_l.png').convert_alpha()
+PLAYER_S1_R = pygame.image.load('images/player/base_s1/player_s1_r.png').convert_alpha()
+
+player = Player("Kevin",1,1,100,100,1,1,50,0,1,'d',7,7)
+player.up_img = PLAYER_B_U
+player.down_img = PLAYER_B_D
+player.left_img = PLAYER_B_L
+player.right_img = PLAYER_B_R
+
+PLAYER_U = PLAYER_B_U       
+PLAYER_D = PLAYER_B_D
+PLAYER_L = PLAYER_B_L
+PLAYER_R = PLAYER_B_R
+
+sword1 = Item(10,10,"Sword 1",pygame.image.load('images/weapons/s1.png').convert_alpha(),True,10,'!')
+berries1 = Item(5,5,"Strawberries",pygame.image.load('images/items/berries1.png').convert_alpha(),True,2,'@')
+
+level_items = [sword1,berries1]
+
+'''if(map_mode == 1):
+    for rw in range(MAPHEIGHT):
+        for cl in range(MAPWIDTH):
+            randomNumber = random.randint(0,15)
+            if randomNumber == 0:
+                tile = COAL
+            elif randomNumber == 1 or randomNumber == 2:
+                tile = WATER
+            elif randomNumber >= 3 and randomNumber <= 7:
+                tile = GRASS
+            else:
+                tile = DIRT
+            tilemap[rw][cl] = tile
+else:
+    i = 0
+    j = 0
+    f = open("levels/1.lvl", "r")    
+    for l in f:
+        for c in l:
+            if c != '\n':
+                tilemap[i][j] = resources[int(c)]
+                j += 1
+        i += 1
+        j = 0
+ '''       
+hud_title_text = pygame.font.Font('fonts/ARCADE.TTF',48)
+hud_player_name_surface = hud_title_text.render(player.name, True, GREEN)
+hud_data_text = pygame.font.Font('fonts/ARCADE.TTF',20)
+
+hud_system_message = ''  
+
+  
+#MAIN GAME LOOP        
+while True:
+    level1.draw_self(DISPLAYSURF)
+    
+    #draw map
+    #for row in range(MAPHEIGHT):
+    #    for column in range(MAPWIDTH):
+    #        DISPLAYSURF.blit(textures[tilemap[row][column]][0], (column*TILESIZE,row*TILESIZE,TILESIZE,TILESIZE))
+    
+    #draw items    
+    for item in level_items:
+        if item.visible:
+            DISPLAYSURF.blit(item.image_path, (item.x_pos*TILESIZE,item.y_pos*TILESIZE))
+    
+    #draw HUD
+    DISPLAYSURF.blit(HUD_LOWER, (0,MAPHEIGHT*TILESIZE))
+    DISPLAYSURF.blit(hud_player_name_surface, (HUD_LEFT_PADDING,MAPHEIGHT*TILESIZE))
+
+    
+    for event in pygame.event.get():
+        if event.type == QUIT:
+            pygame.quit()
+            sys.exit()
+    
+    if player_turn:
+        for i in range(player.moves):
+            if i <= 4:
+                DISPLAYSURF.blit(MOVE_INDICATOR, (HUD_MOVES_PADDING+i*TILESIZE,MAPHEIGHT*TILESIZE+HUD_TITLE_HEIGHT))
+                j = 0
+            else:
+                DISPLAYSURF.blit(MOVE_INDICATOR, (HUD_MOVES_PADDING+j*TILESIZE,(MAPHEIGHT*TILESIZE+HUD_TITLE_HEIGHT)+MOVE_INDICATOR.get_height()+10))
+                j += 1
+
+        
+        if event.type == KEYDOWN and actionKeyPressed == False:
+            if player.moves > 0:
+                if event.key == K_RIGHT:
+                    player.direction = 'r'
+                    if(player.x_pos + 1 < MAPWIDTH and level1.textures[level1.tilemap[ player.y_pos ][ player.x_pos+1 ]][1] == 1):
+                        player.x_pos += 1
+                        actionKeyPressed = True
+                        player.moves -= 1
+                        hud_system_message = 'Move right'
+                        player.item_dropped = False
+                elif event.key == K_LEFT:
+                    player.direction = 'l'
+                    if(player.x_pos > 0 and level1.textures[level1.tilemap[ player.y_pos ][ player.x_pos-1 ]][1] == 1):
+                        player.x_pos -= 1
+                        actionKeyPressed = True
+                        player.moves -= 1
+                        hud_system_message = 'Move left'
+                        player.item_dropped = False
+                elif event.key == K_UP: 
+                    player.direction = 'u'
+                    if(player.y_pos > 0 and level1.textures[level1.tilemap[ player.y_pos-1 ][ player.x_pos ]][1] == 1):
+                        player.y_pos -= 1
+                        actionKeyPressed = True
+                        player.moves -= 1
+                        hud_system_message = 'Move up'
+                        player.item_dropped = False
+                elif event.key == K_DOWN:
+                    player.direction = 'd'
+                    if(player.y_pos + 1 < MAPHEIGHT and level1.textures[level1.tilemap[ player.y_pos+1 ][ player.x_pos ]][1] == 1):
+                        player.y_pos += 1
+                        actionKeyPressed = True
+                        player.moves -= 1
+                        hud_system_message = 'Move down'
+                        player.item_dropped = False
+            if event.key == K_d:
+                actionKeyPressed = True
+                if not berries1.visible:
+                    player.item_dropped = True
+                    berries1.visible = True
+                    berries1.x_pos = player.x_pos
+                    berries1.y_pos = player.y_pos
+            
+            if event.key == K_RETURN:
+                player_turn = False
+                player.moves = player.max_moves
+
+            
+                
+        if event.type == KEYUP:
+            actionKeyPressed = False
+                      
+        if player.x_pos == sword1.x_pos and player.y_pos == sword1.y_pos and sword1.visible:
+            pygame.mixer.Sound.play(collect_sound)
+                    
+            sword1.visible = False
+            player.up_img = PLAYER_S1_U
+            player.down_img = PLAYER_S1_D
+            player.left_img = PLAYER_S1_L
+            player.right_img = PLAYER_S1_R
+            
+            
+        
+        if player.x_pos == berries1.x_pos and player.y_pos == berries1.y_pos and berries1.visible and not player.item_dropped:
+            berries1.visible = False
+            pygame.mixer.Sound.play(collect_sound)
+    
+    else:
+        player.draw_self(DISPLAYSURF, TILESIZE)
+        DISPLAYSURF.blit(PLEASE_WAIT, (((MAPWIDTH*TILESIZE)/2)-(PLEASE_WAIT.get_width()/2),((MAPHEIGHT*TILESIZE)/2)-PLEASE_WAIT.get_height()/2))
+        pygame.display.update()
+        pygame.time.delay(2000)
+        player_turn = True
+        
+    hud_system_surface = hud_data_text.render(hud_system_message, True, GREEN)
+    
+    hud_stat_c1_hp_surface = hud_data_text.render(str(player.hp), True, GREEN)
+    hud_stat_c1_mp_surface = hud_data_text.render(str(player.mp), True, GREEN)
+    hud_stat_c1_lvl_surface = hud_data_text.render(str(player.lvl), True, GREEN)
+    hud_stat_c1_xp_surface = hud_data_text.render(str(player.xp), True, GREEN)
+
+    hud_stat_c2_str_surface = hud_data_text.render(str(player.str), True, GREEN)
+    hud_stat_c2_mag_surface = hud_data_text.render(str(player.mag), True, GREEN)
+    hud_stat_c2_gold_surface = hud_data_text.render(str(player.gold), True, GREEN)
+    hud_stat_c2_xp_surface = hud_data_text.render(str(player.xp), True, GREEN)
+    
+    DISPLAYSURF.blit(hud_system_surface, (HUD_SYSTEM_PADDING, MAPHEIGHT*TILESIZE+HUD_TITLE_HEIGHT))
+    
+    DISPLAYSURF.blit(hud_stat_c1_hp_surface, (HUD_STAT_C1_PADDING, MAPHEIGHT*TILESIZE+HUD_TITLE_HEIGHT))
+    DISPLAYSURF.blit(hud_stat_c1_mp_surface, (HUD_STAT_C1_PADDING, MAPHEIGHT*TILESIZE+HUD_TITLE_HEIGHT+HUD_STAT_GAP))
+    DISPLAYSURF.blit(hud_stat_c1_lvl_surface, (HUD_STAT_C1_PADDING, MAPHEIGHT*TILESIZE+HUD_TITLE_HEIGHT+HUD_STAT_GAP*2))
+    DISPLAYSURF.blit(hud_stat_c1_lvl_surface, (HUD_STAT_C1_PADDING, MAPHEIGHT*TILESIZE+HUD_TITLE_HEIGHT+HUD_STAT_GAP*3))
+    
+    DISPLAYSURF.blit(hud_stat_c2_str_surface, (HUD_STAT_C2_PADDING, MAPHEIGHT*TILESIZE+HUD_TITLE_HEIGHT))
+    DISPLAYSURF.blit(hud_stat_c2_mag_surface, (HUD_STAT_C2_PADDING, MAPHEIGHT*TILESIZE+HUD_TITLE_HEIGHT+HUD_STAT_GAP))
+    DISPLAYSURF.blit(hud_stat_c2_gold_surface, (HUD_STAT_C2_PADDING, MAPHEIGHT*TILESIZE+HUD_TITLE_HEIGHT+HUD_STAT_GAP*2))
+    DISPLAYSURF.blit(hud_stat_c2_xp_surface, (HUD_STAT_C2_PADDING, MAPHEIGHT*TILESIZE+HUD_TITLE_HEIGHT+HUD_STAT_GAP*3))
+    
+    player.draw_self(DISPLAYSURF, TILESIZE)
+    
+    pygame.display.update()
+    fpsClock.tick(FPS)
+    
