@@ -8,6 +8,8 @@ from player import *
 from level import *
 from armor import *
 from enemy import *
+from colors import *
+from hud import *
 
 from pygame.locals import *
 
@@ -21,20 +23,6 @@ attack_mode = False
 attack_variance_increase = False
 proj_x = 0
 proj_y = 0
-
-BLACK = (0,   0,   0)
-BROWN = (153, 76,  0)
-GREEN = (0,   255, 0)
-BLUE = (0,   0,   255)
-GREY = (100, 100, 100)
-RED = (255, 0,   0)
-
-
-class GameState(Enum):
-    MOVE = 1
-    ATTACK = 2
-    HELP = 3
-
 
 TILESIZE = 40
 MAPWIDTH = 40
@@ -65,7 +53,6 @@ pygame.display.set_icon(FAVICON)
 pygame.display.set_caption('Dunj')
 
 PLEASE_WAIT = pygame.image.load('images/misc/please_wait.png').convert_alpha()
-MOVE_INDICATOR = pygame.image.load('images/misc/move_indicator.png').convert_alpha()
 HELP_SCREEN = pygame.image.load('images/misc/help.png').convert_alpha()
 TILE_HIGHLIGHT = pygame.image.load('images/ground/highlight.png').convert_alpha()
 TILE_HIGHLIGHT_ACTIVE = pygame.image.load('images/ground/highlight_active.png').convert_alpha()
@@ -83,25 +70,6 @@ attack_grid_mr = (0, 0)
 attack_grid_bl = (0, 0)
 attack_grid_bm = (0, 0)
 attack_grid_br = (0, 0)
-
-HUD_LOWER = pygame.image.load('images/misc/hud_lower.png').convert_alpha()
-HUD_LEFT_PADDING = 25
-HUD_SYSTEM_PADDING = 1186
-HUD_MOVES_PADDING = 938
-HUD_TITLE_HEIGHT = 40
-HUD_STAT_C1_PADDING = HUD_LEFT_PADDING + 60
-HUD_STAT_C2_PADDING = HUD_STAT_C1_PADDING + 180
-HUD_STAT_GAP = 18
-
-HUD_INV_PADDING = 329
-HUD_INV_SPACING = 60
-
-HUD_WEAPON = HUD_LEFT_PADDING + 160
-HUD_HEAD = HUD_WEAPON + 220
-HUD_CHEST = HUD_HEAD + 280
-HUD_LEGS = HUD_CHEST + 250
-HUD_SPELL1 = HUD_LEGS + 300
-HUD_SPELL2 = HUD_SPELL1 + 265
 
 PLAYER_B_U = pygame.image.load('images/player/base/player_u.png').convert_alpha()
 PLAYER_B_D = pygame.image.load('images/player/base/player_d.png').convert_alpha()
@@ -152,6 +120,9 @@ player.down_img = PLAYER_B_D
 player.left_img = PLAYER_B_L
 player.right_img = PLAYER_B_R
 
+hud = Hud(player)
+hud.draw(DISPLAYSURF, TILESIZE, MAPHEIGHT)
+
 PLAYER_U = PLAYER_B_U       
 PLAYER_D = PLAYER_B_D
 PLAYER_L = PLAYER_B_L
@@ -184,78 +155,11 @@ level1.enemies.append(skeleton1)
 level1.enemies.append(skeleton2)
 
 hud_title_text = pygame.font.Font('fonts/ARCADE.TTF', 48)
-hud_player_name_surface = hud_title_text.render(player.name, True, GREEN)
+hud_player_name_surface = hud_title_text.render(player.name, True, Colors.GREEN)
 hud_data_text = pygame.font.Font('fonts/ARCADE.TTF', 20)
-
-hud_system_message = ''  
 
 deal_damage = False
 attacking = False
-
-
-def draw_hud(DISPLAYSURF, player):
-    DISPLAYSURF.blit(HUD_LOWER, (0, MAPHEIGHT*TILESIZE))
-    DISPLAYSURF.blit(hud_player_name_surface, (HUD_LEFT_PADDING, MAPHEIGHT*TILESIZE))
-
-    hud_system_surface = hud_data_text.render(hud_system_message, True, GREEN)
-    
-    hud_stat_c1_hp_surface = hud_data_text.render(str(player.hp), True, GREEN)
-    hud_stat_c1_mp_surface = hud_data_text.render(str(player.mp), True, GREEN)
-    hud_stat_c1_lvl_surface = hud_data_text.render(str(player.lvl), True, GREEN)
-    hud_stat_c1_xp_surface = hud_data_text.render(str(player.xp), True, GREEN)
-
-    hud_stat_c2_str_surface = hud_data_text.render(str(player.str), True, GREEN)
-    hud_stat_c2_mag_surface = hud_data_text.render(str(player.mag), True, GREEN)
-    hud_stat_c2_gold_surface = hud_data_text.render(str(player.gold), True, GREEN)
-    hud_stat_c2_def_surface = hud_data_text.render(str(player.get_defense()), True, GREEN)
-    
-    DISPLAYSURF.blit(hud_system_surface, (HUD_SYSTEM_PADDING, MAPHEIGHT*TILESIZE+HUD_TITLE_HEIGHT))
-    
-    DISPLAYSURF.blit(hud_stat_c1_hp_surface, (HUD_STAT_C1_PADDING, MAPHEIGHT*TILESIZE+HUD_TITLE_HEIGHT))
-    DISPLAYSURF.blit(hud_stat_c1_mp_surface, (HUD_STAT_C1_PADDING, MAPHEIGHT*TILESIZE+HUD_TITLE_HEIGHT+HUD_STAT_GAP))
-    DISPLAYSURF.blit(hud_stat_c1_lvl_surface, (HUD_STAT_C1_PADDING, MAPHEIGHT*TILESIZE+HUD_TITLE_HEIGHT+HUD_STAT_GAP*2))
-    DISPLAYSURF.blit(hud_stat_c1_xp_surface, (HUD_STAT_C1_PADDING, MAPHEIGHT*TILESIZE+HUD_TITLE_HEIGHT+HUD_STAT_GAP*3))
-    
-    DISPLAYSURF.blit(hud_stat_c2_str_surface, (HUD_STAT_C2_PADDING, MAPHEIGHT*TILESIZE+HUD_TITLE_HEIGHT))
-    DISPLAYSURF.blit(hud_stat_c2_def_surface, (HUD_STAT_C2_PADDING, MAPHEIGHT * TILESIZE + HUD_TITLE_HEIGHT +
-                                               HUD_STAT_GAP))
-    DISPLAYSURF.blit(hud_stat_c2_mag_surface, (HUD_STAT_C2_PADDING, MAPHEIGHT*TILESIZE+HUD_TITLE_HEIGHT+HUD_STAT_GAP*2))
-    DISPLAYSURF.blit(hud_stat_c2_gold_surface, (HUD_STAT_C2_PADDING, MAPHEIGHT*TILESIZE+HUD_TITLE_HEIGHT +
-                                                HUD_STAT_GAP*3))
-
-    for i in range(player.moves):
-        if i <= 4:
-            DISPLAYSURF.blit(MOVE_INDICATOR, (HUD_MOVES_PADDING+i*TILESIZE, MAPHEIGHT*TILESIZE+HUD_TITLE_HEIGHT))
-            j = 0
-        else:
-            DISPLAYSURF.blit(MOVE_INDICATOR, (HUD_MOVES_PADDING+j*TILESIZE, (MAPHEIGHT*TILESIZE+HUD_TITLE_HEIGHT) +
-                                              MOVE_INDICATOR.get_height()+10))
-            j += 1
-    
-    i = 0
-    for item in player.inventory:
-        DISPLAYSURF.blit(item.inventory_thumb, (HUD_INV_PADDING+(i*HUD_INV_SPACING), MAPHEIGHT*TILESIZE+HUD_TITLE_HEIGHT
-                                                + 40))
-        i += 1
-        
-    if player.weapon is not None:
-        DISPLAYSURF.blit(player.weapon.image_path, (HUD_WEAPON, MAPHEIGHT*TILESIZE+HUD_HEIGHT*TILESIZE-TILESIZE))
-
-    if player.armor_head is not None:
-        DISPLAYSURF.blit(player.armor_head.image_path, (HUD_HEAD, MAPHEIGHT*TILESIZE+HUD_HEIGHT*TILESIZE-TILESIZE))
-
-    if player.armor_chest is not None:
-        DISPLAYSURF.blit(player.armor_chest.image_path, (HUD_CHEST, MAPHEIGHT*TILESIZE+HUD_HEIGHT*TILESIZE-TILESIZE))
-        
-    if player.armor_legs is not None:
-        DISPLAYSURF.blit(player.armor_legs.image_path, (HUD_LEGS, MAPHEIGHT*TILESIZE+HUD_HEIGHT*TILESIZE-TILESIZE))
-
-    if player.spell1 is not None:
-        DISPLAYSURF.blit(player.spell1.image_path, (HUD_SPELL1, MAPHEIGHT*TILESIZE+HUD_HEIGHT*TILESIZE-TILESIZE))
-
-    if player.spell2 is not None:
-        DISPLAYSURF.blit(player.spell2.image_path, (HUD_SPELL2, MAPHEIGHT*TILESIZE+HUD_HEIGHT*TILESIZE-TILESIZE))
-
 
 # MAIN GAME LOOP
 while True:
@@ -271,7 +175,7 @@ while True:
         enemy.draw_self(DISPLAYSURF, TILESIZE)
 
     # draw HUD
-    draw_hud(DISPLAYSURF, player)
+    hud.draw(DISPLAYSURF, TILESIZE, MAPHEIGHT)
 
     for event in pygame.event.get():
         pygame.event.set_blocked(pygame.MOUSEMOTION)
@@ -294,7 +198,7 @@ while True:
                             player.x_pos += 1
                             actionKeyPressed = True
                             player.moves -= 1
-                            hud_system_message = 'Move right'
+                            hud.system_message = 'Move right'
                             player.item_dropped = False
                     elif event.key == K_LEFT:
                         player.direction = 'l'
@@ -303,7 +207,7 @@ while True:
                             player.x_pos -= 1
                             actionKeyPressed = True
                             player.moves -= 1
-                            hud_system_message = 'Move left'
+                            hud.system_message = 'Move left'
                             player.item_dropped = False
                     elif event.key == K_UP:
                         player.direction = 'u'
@@ -312,7 +216,7 @@ while True:
                             player.y_pos -= 1
                             actionKeyPressed = True
                             player.moves -= 1
-                            hud_system_message = 'Move up'
+                            hud.system_message = 'Move up'
                             player.item_dropped = False
                     elif event.key == K_DOWN:
                         player.direction = 'd'
@@ -322,7 +226,7 @@ while True:
                             player.y_pos += 1
                             actionKeyPressed = True
                             player.moves -= 1
-                            hud_system_message = 'Move down'
+                            hud.system_message = 'Move down'
                             player.item_dropped = False
 
                     # inventory slot keys
@@ -332,70 +236,70 @@ while True:
                             player.inventory[0].use(player)
                             player.inventory.remove(player.inventory[0])
                         except IndexError:
-                            hud_system_message = 'No item in slot'
+                            hud.system_message = 'No item in slot'
                     elif event.key == K_2:
                         actionKeyPressed = True
                         try:
                             player.inventory[1].use(player)
                             player.inventory.remove(player.inventory[1])
                         except IndexError:
-                            hud_system_message = 'No item in slot'
+                            hud.system_message = 'No item in slot'
                     elif event.key == K_3:
                         actionKeyPressed = True
                         try:
                             player.inventory[2].use(player)
                             player.inventory.remove(player.inventory[2])
                         except IndexError:
-                            hud_system_message = 'No item in slot'
+                            hud.system_message = 'No item in slot'
                     elif event.key == K_4:
                         actionKeyPressed = True
                         try:
                             player.inventory[3].use(player)
                             player.inventory.remove(player.inventory[3])
                         except IndexError:
-                            hud_system_message = 'No item in slot'
+                            hud.system_message = 'No item in slot'
                     elif event.key == K_5:
                         actionKeyPressed = True
                         try:
                             player.inventory[4].use(player)
                             player.inventory.remove(player.inventory[4])
                         except IndexError:
-                            hud_system_message = 'No item in slot'
+                            hud.system_message = 'No item in slot'
                     elif event.key == K_6:
                         actionKeyPressed = True
                         try:
                             player.inventory[5].use(player)
                             player.inventory.remove(player.inventory[5])
                         except IndexError:
-                            hud_system_message = 'No item in slot'
+                            hud.system_message = 'No item in slot'
                     elif event.key == K_7:
                         actionKeyPressed = True
                         try:
                             player.inventory[6].use(player)
                             player.inventory.remove(player.inventory[6])
                         except IndexError:
-                            hud_system_message = 'No item in slot'
+                            hud.system_message = 'No item in slot'
                     elif event.key == K_8:
                         actionKeyPressed = True
                         try:
                             player.inventory[7].use(player)
                             player.inventory.remove(player.inventory[7])
                         except IndexError:
-                            hud_system_message = 'No item in slot'
+                            hud.system_message = 'No item in slot'
                     elif event.key == K_9:
                         actionKeyPressed = True
                         try:
                             player.inventory[8].use(player)
                             player.inventory.remove(player.inventory[8])
                         except IndexError:
-                            hud_system_message = 'No item in slot'
+                            hud.system_message = 'No item in slot'
                     elif event.key == K_0:
                         actionKeyPressed = True
                         try:
                             player.inventory[9].use(player)
                             player.inventory.remove(player.inventory[9])
                         except IndexError:
-                            hud_system_message = 'No item in slot'
+                            hud.system_message = 'No item in slot'
 
                     if event.key == K_RETURN:
                         player_turn = False
@@ -467,23 +371,23 @@ while True:
                     if not isinstance(item, Weapon) and not isinstance(item, Armor):
                         pygame.mixer.Sound.play(collect_sound)
                         player.inventory.append(item)
-                        hud_system_message = "Obtained " + item.name
+                        hud.system_message = "Obtained " + item.name
                         level1.items.remove(item)
 
                     elif isinstance(item, Weapon):
                         if player.weapon is None:
                             pygame.mixer.Sound.play(collect_sound)
-                            hud_system_message = "Obtained " + item.name
+                            hud.system_message = "Obtained " + item.name
                             player.weapon = item
                             level1.items.remove(item)
                         else:
-                            hud_system_message = "Swap weapon? (y/n)"
+                            hud.system_message = "Swap weapon? (y/n)"
                             player.draw_self(DISPLAYSURF, TILESIZE)
                             pygame.display.update()
                             if event.key == K_y:
                                 actionKeyPressed = True
                                 pygame.mixer.Sound.play(collect_sound)
-                                hud_system_message = "Obtained " + item.name
+                                hud.system_message = "Obtained " + item.name
 
                                 player.drop_weapon()
 
@@ -501,7 +405,7 @@ while True:
                             if player.armor_legs is None:
                                 player.armor_legs = item
                         pygame.mixer.Sound.play(collect_sound)
-                        hud_system_message = "Obtained " + item.name
+                        hud.system_message = "Obtained " + item.name
                         level1.items.remove(item)
 
         else:
@@ -525,13 +429,13 @@ while True:
 
                     enemy.hp -= damage
                     if enemy.hp <= 0:
-                        hud_system_message = enemy.name + " defeated! " + str(enemy.xp_give) + " xp awarded!"
+                        hud.system_message = enemy.name + " defeated! " + str(enemy.xp_give) + " xp awarded!"
                         player.xp += enemy.xp_give
                         level1.enemies.remove(enemy)
                     else:
-                        hud_system_message = enemy.name + " damaged for " + str(damage) + " hp."
+                        hud.system_message = enemy.name + " damaged for " + str(damage) + " hp."
                 else:
-                    hud_system_message = "No weapon equipped!"
+                    hud.system_message = "No weapon equipped!"
     else:
         # clamps to ensure valid indexing of tile arrays
         player.x_pos = int(player.x_pos)

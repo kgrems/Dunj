@@ -2,10 +2,8 @@ from actor import *
 
 
 class Player(Actor):
-    def __init__(self, name, x_pos, y_pos, hp, mp, str, defense, mag, gold, xp, moves, direction, max_moves, max_hp,
-                 lvl, visible):
-        Actor.__init__(self, name, x_pos, y_pos, hp, mp, str, defense, mag, gold, moves, direction, max_moves, max_hp,
-                       visible)
+    def __init__(self, name, x_pos, y_pos, hp, mp, str, defense, mag, gold, xp, moves, direction, max_moves, max_hp, lvl, visible):
+        Actor.__init__(self, name, x_pos, y_pos, hp, mp, str, defense, mag, gold, moves, direction, max_moves, max_hp, visible)
 
         self.lvl = lvl
 

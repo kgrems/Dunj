@@ -1,7 +1,6 @@
 class Actor:
 
-    def __init__(self, name, x_pos, y_pos, hp, mp, str, defense, mag, gold, moves, direction, max_moves, max_hp,
-                 visible):
+    def __init__(self, name, x_pos, y_pos, hp, mp, str, defense, mag, gold, moves, direction, max_moves, max_hp, visible):
         self.name = name
         self.x_pos = x_pos
         self.y_pos = y_pos
