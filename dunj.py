@@ -10,7 +10,7 @@ from armor import *
 from enemy import *
 from colors import *
 from hud import *
-
+from loaders import *
 from pygame.locals import *
 
 pygame.mixer.pre_init(44100, -16, 1, 512)
@@ -52,6 +52,9 @@ pygame.display.set_icon(FAVICON)
 
 pygame.display.set_caption('Dunj')
 
+resources = Resources()
+loader = Loaders(resources)
+
 PLEASE_WAIT = pygame.image.load('images/misc/please_wait.png').convert_alpha()
 HELP_SCREEN = pygame.image.load('images/misc/help.png').convert_alpha()
 TILE_HIGHLIGHT = pygame.image.load('images/ground/highlight.png').convert_alpha()
@@ -71,41 +74,13 @@ attack_grid_bl = (0, 0)
 attack_grid_bm = (0, 0)
 attack_grid_br = (0, 0)
 
-PLAYER_B_U = pygame.image.load('images/player/base/player_u.png').convert_alpha()
-PLAYER_B_D = pygame.image.load('images/player/base/player_d.png').convert_alpha()
-PLAYER_B_L = pygame.image.load('images/player/base/player_l.png').convert_alpha()
-PLAYER_B_R = pygame.image.load('images/player/base/player_r.png').convert_alpha()
 
-SKELETON1_U = pygame.image.load('images/enemies/skeleton1_u.png').convert_alpha()
-SKELETON1_D = pygame.image.load('images/enemies/skeleton1_d.png').convert_alpha()
-SKELETON1_L = pygame.image.load('images/enemies/skeleton1_l.png').convert_alpha()
-SKELETON1_R = pygame.image.load('images/enemies/skeleton1_r.png').convert_alpha()
-
-S1_U = pygame.image.load('images/weapons/s1/u.png').convert_alpha()
-S1_D = pygame.image.load('images/weapons/s1/d.png').convert_alpha()
-S1_L = pygame.image.load('images/weapons/s1/l.png').convert_alpha()
-S1_R = pygame.image.load('images/weapons/s1/r.png').convert_alpha()
-
-S2_U = pygame.image.load('images/weapons/s2/s2_u.png').convert_alpha()
-S2_D = pygame.image.load('images/weapons/s2/s2_d.png').convert_alpha()
-S2_L = pygame.image.load('images/weapons/s2/s2_l.png').convert_alpha()
-S2_R = pygame.image.load('images/weapons/s2/s2_r.png').convert_alpha()
-
-H1_U = pygame.image.load('images/armor/h1/h1_u.png').convert_alpha()
-H1_D = pygame.image.load('images/armor/h1/h1_d.png').convert_alpha()
-H1_L = pygame.image.load('images/armor/h1/h1_l.png').convert_alpha()
-H1_R = pygame.image.load('images/armor/h1/h1_r.png').convert_alpha()
-
-C1_U = pygame.image.load('images/armor/c1/c1_u.png').convert_alpha()
-C1_D = pygame.image.load('images/armor/c1/c1_d.png').convert_alpha()
-C1_L = pygame.image.load('images/armor/c1/c1_l.png').convert_alpha()
-C1_R = pygame.image.load('images/armor/c1/c1_r.png').convert_alpha()
 
 skeleton1 = Enemy("Weak Skeleton", 10, 10, 100, 15, 10, 10, 13, 2, 5, 'd', 5, 10, 15, True)
-skeleton1.up_img = SKELETON1_U
-skeleton1.down_img = SKELETON1_D
-skeleton1.left_img = SKELETON1_L
-skeleton1.right_img = SKELETON1_R
+skeleton1.up_img = resources.SKELETON1_U
+skeleton1.down_img = resources.SKELETON1_D
+skeleton1.left_img = resources.SKELETON1_L
+skeleton1.right_img = resources.SKELETON1_R
 
 skeleton2 = Enemy("Strong Skeleton", 10, 11, 300, 10, 12, 1, 3, 4, 4, 'u', 10, 30, 20, True)
 skeleton2.up_img = SKELETON1_U
@@ -128,21 +103,15 @@ PLAYER_D = PLAYER_B_D
 PLAYER_L = PLAYER_B_L
 PLAYER_R = PLAYER_B_R
 
-sword1 = Weapon(4, 4, "Steel Long Sword", pygame.image.load('images/weapons/s1/s1.png').convert_alpha(), True, 10, 's1', pygame.image.load('images/weapons/s1/s1.png').convert_alpha(), 5, 0.10, 2, S1_U, S1_D, S1_L, S1_R)
-sword2 = Weapon(6, 6, "Rusty Short Sword", pygame.image.load('images/weapons/s2/s2.png').convert_alpha(), True, 2, 's2', pygame.image.load('images/weapons/s2/s2.png').convert_alpha(), 10, 0.20, 1, S2_U, S2_D, S2_L, S2_R)
-berries1 = Health(3, 3, "Berries1", pygame.image.load('images/items/berries1.png').convert_alpha(), True, 2, '@', pygame.image.load('images/items/berries1_i.png').convert_alpha(), 10)
-berries2 = Health(2, 2, "Berries2", pygame.image.load('images/items/berries1.png').convert_alpha(), True, 2, '@', pygame.image.load('images/items/berries1_i.png').convert_alpha(), 15)
-peach1 = Health(2, 6, "Juicy Peach", pygame.image.load('images/items/peach1.png').convert_alpha(), True, 2, 'p1', pygame.image.load('images/items/peach1_i.png').convert_alpha(), 1)
-armorh1 = Armor(3, 4, "Cloth Head Armor", pygame.image.load('images/armor/h1/h1.png').convert_alpha(), True, 5, 'h1', pygame.image.load('images/armor/h1/h1.png').convert_alpha(), 5, 'h', H1_U, H1_D, H1_L, H1_R)
-armorc1 = Armor(3, 5, "Hard Chest Armor", pygame.image.load('images/armor/c1/c1.png').convert_alpha(), True, 10, 'c1', pygame.image.load('images/armor/c1/c1.png').convert_alpha(), 10, 'c', C1_U, C1_D, C1_L, C1_R)
 
-level1.items.append(sword1)
-level1.items.append(sword2)
-level1.items.append(berries1)
-level1.items.append(berries2)
-level1.items.append(peach1)
-level1.items.append(armorh1)
-level1.items.append(armorc1)
+
+level1.items.append(loader.sword1)
+level1.items.append(loader.sword2)
+level1.items.append(loader.berries1)
+level1.items.append(loader.berries2)
+level1.items.append(loader.peach1)
+level1.items.append(loader.armorh1)
+level1.items.append(loader.armorc1)
 
 level1.enemies.append(skeleton1)
 level1.enemies.append(skeleton2)
