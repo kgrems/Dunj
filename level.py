@@ -45,6 +45,4 @@ class Level:
     def draw_self(self, DISPLAYSURF):
         for row in range(self.map_height):
             for column in range(self.map_width):
-                DISPLAYSURF.blit(self.textures[self.tilemap[row][column]][0], (column*self.tile_size,
-                                                                               row*self.tile_size, self.tile_size,
-                                                                               self.tile_size))
+                DISPLAYSURF.blit(self.textures[self.tilemap[row][column]][0], (column*self.tile_size, row*self.tile_size, self.tile_size, self.tile_size))
