@@ -3,11 +3,17 @@
 Built under python v3.7.6 and pygame v1.9.6.
 ## Instructions
 During each turn, players can move a set amount of tiles.
-
-Valid actions during each player turn include:
-    d       - drop currently equipped weapon
-    enter   - end turn
-    /       - display help menu
+### Commands
+d - drop currently equipped weapon
+enter - end turn 
+/ - display help menu
+e - enter attack mode
+| Command | Description |
+| ----------- | ----------- |
+| d | Text |
+| enter | Text |
+| / | Text |
+| e | Text |
     
 ## Credits
 ### Fonts
