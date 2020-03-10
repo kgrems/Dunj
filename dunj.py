@@ -83,25 +83,25 @@ skeleton1.left_img = resources.SKELETON1_L
 skeleton1.right_img = resources.SKELETON1_R
 
 skeleton2 = Enemy("Strong Skeleton", 10, 11, 300, 10, 12, 1, 3, 4, 4, 'u', 10, 30, 20, True)
-skeleton2.up_img = SKELETON1_U
-skeleton2.down_img = SKELETON1_D
-skeleton2.left_img = SKELETON1_L
-skeleton2.right_img = SKELETON1_R
+skeleton2.up_img = resources.SKELETON1_U
+skeleton2.down_img = resources.SKELETON1_D
+skeleton2.left_img = resources.SKELETON1_L
+skeleton2.right_img = resources.SKELETON1_R
 
 
 player = Player("Kevin", 1, 1, 78, 34, 20, 22, 5, 10, 0, 7, 'd', 7, 100, 1, True)
-player.up_img = PLAYER_B_U
-player.down_img = PLAYER_B_D
-player.left_img = PLAYER_B_L
-player.right_img = PLAYER_B_R
+player.up_img = resources.PLAYER_B_U
+player.down_img = resources.PLAYER_B_D
+player.left_img = resources.PLAYER_B_L
+player.right_img = resources.PLAYER_B_R
 
 hud = Hud(player)
 hud.draw(DISPLAYSURF, TILESIZE, MAPHEIGHT)
 
-PLAYER_U = PLAYER_B_U       
-PLAYER_D = PLAYER_B_D
-PLAYER_L = PLAYER_B_L
-PLAYER_R = PLAYER_B_R
+PLAYER_U = resources.PLAYER_B_U       
+PLAYER_D = resources.PLAYER_B_D
+PLAYER_L = resources.PLAYER_B_L
+PLAYER_R = resources.PLAYER_B_R
 
 
 
