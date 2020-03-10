@@ -2,9 +2,9 @@ from item import *
 
 
 class Weapon(Item):
-    def __init__(self, x_pos, y_pos, name, image_path, visible, cost, data_symbol, inventory_thumb, damage,
+    def __init__(self, x_pos, y_pos, size, name, image_path, visible, cost, data_symbol, inventory_thumb, damage,
                  attack_variance, weapon_range, u_img, d_img, l_img, r_img):
-        Item.__init__(self, x_pos, y_pos, name, image_path, visible, cost, data_symbol, inventory_thumb)
+        Item.__init__(self, x_pos, y_pos, size, name, image_path, visible, cost, data_symbol, inventory_thumb)
         
         self.damage = damage
         self.weapon_range = weapon_range

@@ -2,9 +2,9 @@ from item import *
 
 
 class Armor(Item):
-    def __init__(self, x_pos, y_pos, name, image_path, visible, cost, data_symbol, inventory_thumb, defense,
+    def __init__(self, x_pos, y_pos, size, name, image_path, visible, cost, data_symbol, inventory_thumb, defense,
                  armor_type, u_img, d_img, l_img, r_img):
-        Item.__init__(self, x_pos, y_pos, name, image_path, visible, cost, data_symbol, inventory_thumb)
+        Item.__init__(self, x_pos, y_pos, size, name, image_path, visible, cost, data_symbol, inventory_thumb)
 
         self.defense = defense
         # valid types are 'h' 'c' 'l'

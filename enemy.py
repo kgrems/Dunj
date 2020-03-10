@@ -2,9 +2,9 @@ from actor import *
 
 
 class Enemy(Actor):
-    def __init__(self, name, x_pos, y_pos, hp, mp, str, defense, mag, gold, moves, direction, max_moves, max_hp,
+    def __init__(self, name, x_pos, y_pos, size, hp, mp, str, defense, mag, gold, moves, direction, max_moves, max_hp,
                  xp_give, visible):
-        Actor.__init__(self, name, x_pos, y_pos, hp, mp, str, defense, mag, gold, moves, direction, max_moves, max_hp,
+        Actor.__init__(self, name, x_pos, y_pos, size, hp, mp, str, defense, mag, gold, moves, direction, max_moves, max_hp,
                        visible)
 
         self.x_pos = x_pos

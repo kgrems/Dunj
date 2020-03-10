@@ -16,6 +16,11 @@ from pygame.locals import *
 pygame.mixer.pre_init(44100, -16, 1, 512)
 pygame.init()
 
+players = pygame.sprite.Group()
+enemies = pygame.sprite.Group()
+items = pygame.sprite.Group()
+tiles = pygame.sprite.Group()
+
 sound_enabled = False
 ai_delay = False
 input_lock = False
@@ -53,7 +58,7 @@ pygame.display.set_icon(FAVICON)
 pygame.display.set_caption('Dunj')
 
 resources = Resources()
-loader = Loaders(resources)
+loader = Loaders(resources, TILESIZE)
 
 PLEASE_WAIT = pygame.image.load('images/misc/please_wait.png').convert_alpha()
 HELP_SCREEN = pygame.image.load('images/misc/help.png').convert_alpha()
@@ -76,20 +81,20 @@ attack_grid_br = (0, 0)
 
 
 
-skeleton1 = Enemy("Weak Skeleton", 10, 10, 100, 15, 10, 10, 13, 2, 5, 'd', 5, 10, 15, True)
+skeleton1 = Enemy("Weak Skeleton", 10, 10, TILESIZE, 100, 15, 10, 10, 13, 2, 5, 'd', 5, 10, 15, True)
 skeleton1.up_img = resources.SKELETON1_U
 skeleton1.down_img = resources.SKELETON1_D
 skeleton1.left_img = resources.SKELETON1_L
 skeleton1.right_img = resources.SKELETON1_R
 
-skeleton2 = Enemy("Strong Skeleton", 10, 11, 300, 10, 12, 1, 3, 4, 4, 'u', 10, 30, 20, True)
+skeleton2 = Enemy("Strong Skeleton", 10, 11, TILESIZE, 300, 10, 12, 1, 3, 4, 4, 'u', 10, 30, 20, True)
 skeleton2.up_img = resources.SKELETON1_U
 skeleton2.down_img = resources.SKELETON1_D
 skeleton2.left_img = resources.SKELETON1_L
 skeleton2.right_img = resources.SKELETON1_R
 
 
-player = Player("Kevin", 1, 1, 78, 34, 20, 22, 5, 10, 0, 7, 'd', 7, 100, 1, True)
+player = Player("Kevin", 1, 1, TILESIZE, 78, 34, 20, 22, 5, 10, 0, 7, 'd', 7, 100, 1, True)
 player.up_img = resources.PLAYER_B_U
 player.down_img = resources.PLAYER_B_D
 player.left_img = resources.PLAYER_B_L
