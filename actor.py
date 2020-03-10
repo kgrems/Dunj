@@ -1,7 +1,6 @@
 import pygame
 from colors import *
 
-
 class Actor(pygame.sprite.Sprite):
 
     def __init__(self, name, x_pos, y_pos, size, hp, mp, str, defense, mag, gold, moves, direction, max_moves, max_hp, visible):
