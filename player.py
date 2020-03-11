@@ -30,46 +30,47 @@ class Player(Actor):
         self.tile_attack_direction = ''
 
     def draw_self(self, surf, tilesize):
+        pos = (self.x_pos*tilesize, self.y_pos*tilesize)
         if self.direction == 'd':
-            surf.blit(self.down_img,(self.x_pos*tilesize,self.y_pos*tilesize))
+            surf.blit(self.down_img, pos)
             if self.armor_head is not None:
-                surf.blit(self.armor_head.d_img,(self.x_pos*tilesize,self.y_pos*tilesize))
+                surf.blit(self.armor_head.d_img, pos)
             if self.armor_chest is not None:
-                surf.blit(self.armor_chest.d_img, (self.x_pos * tilesize, self.y_pos * tilesize))
+                surf.blit(self.armor_chest.d_img, pos)
             if self.armor_legs is not None:
-                surf.blit(self.armor_legs.d_img, (self.x_pos * tilesize, self.y_pos * tilesize))
+                surf.blit(self.armor_legs.d_img, pos)
             if self.weapon is not None:
-                surf.blit(self.weapon.d_img,(self.x_pos*tilesize,self.y_pos*tilesize))
+                surf.blit(self.weapon.d_img,pos)
         elif self.direction == 'l':
-            surf.blit(self.left_img,(self.x_pos*tilesize,self.y_pos*tilesize))
+            surf.blit(self.left_img,pos)
             if self.armor_head is not None:
-                surf.blit(self.armor_head.l_img,(self.x_pos*tilesize,self.y_pos*tilesize))
+                surf.blit(self.armor_head.l_img,pos)
             if self.armor_chest is not None:
-                surf.blit(self.armor_chest.l_img, (self.x_pos * tilesize, self.y_pos * tilesize))
+                surf.blit(self.armor_chest.l_img, pos)
             if self.armor_legs is not None:
-                surf.blit(self.armor_legs.l_img, (self.x_pos * tilesize, self.y_pos * tilesize))
+                surf.blit(self.armor_legs.l_img, pos)
             if self.weapon is not None:
-                surf.blit(self.weapon.l_img,(self.x_pos*tilesize,self.y_pos*tilesize))
+                surf.blit(self.weapon.l_img,pos)
         elif self.direction == 'r':
-            surf.blit(self.right_img,(self.x_pos*tilesize,self.y_pos*tilesize))
+            surf.blit(self.right_img,pos)
             if self.armor_head is not None:
-                surf.blit(self.armor_head.r_img,(self.x_pos*tilesize,self.y_pos*tilesize))
+                surf.blit(self.armor_head.r_img,pos)
             if self.armor_chest is not None:
-                surf.blit(self.armor_chest.r_img, (self.x_pos * tilesize, self.y_pos * tilesize))
+                surf.blit(self.armor_chest.r_img, pos)
             if self.armor_legs is not None:
-                surf.blit(self.armor_legs.r_img, (self.x_pos * tilesize, self.y_pos * tilesize))
+                surf.blit(self.armor_legs.r_img, pos)
             if self.weapon is not None:
-                surf.blit(self.weapon.r_img,(self.x_pos*tilesize,self.y_pos*tilesize))
+                surf.blit(self.weapon.r_img,pos)
         elif self.direction == 'u':
-            surf.blit(self.up_img,(self.x_pos*tilesize,self.y_pos*tilesize))
+            surf.blit(self.up_img,pos)
             if self.armor_head is not None:
-                surf.blit(self.armor_head.u_img,(self.x_pos*tilesize,self.y_pos*tilesize))
+                surf.blit(self.armor_head.u_img,pos)
             if self.armor_chest is not None:
-                surf.blit(self.armor_chest.u_img, (self.x_pos * tilesize, self.y_pos * tilesize))
+                surf.blit(self.armor_chest.u_img, pos)
             if self.armor_legs is not None:
-                surf.blit(self.armor_legs.u_img, (self.x_pos * tilesize, self.y_pos * tilesize))
+                surf.blit(self.armor_legs.u_img, pos)
             if self.weapon is not None:
-                surf.blit(self.weapon.u_img,(self.x_pos*tilesize,self.y_pos*tilesize))
+                surf.blit(self.weapon.u_img,pos)
 
     def get_defense(self):
         result = 0
