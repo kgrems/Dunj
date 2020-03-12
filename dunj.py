@@ -81,17 +81,6 @@ attack_grid_br = (0, 0)
 
 
 
-skeleton1 = Enemy("Weak Skeleton", 10, 10, TILESIZE, 100, 15, 10, 10, 13, 2, 5, 'd', 5, 10, 15, True)
-skeleton1.up_img = resources.SKELETON1_U
-skeleton1.down_img = resources.SKELETON1_D
-skeleton1.left_img = resources.SKELETON1_L
-skeleton1.right_img = resources.SKELETON1_R
-
-skeleton2 = Enemy("Strong Skeleton", 10, 11, TILESIZE, 300, 10, 12, 1, 3, 4, 4, 'u', 10, 30, 20, True)
-skeleton2.up_img = resources.SKELETON1_U
-skeleton2.down_img = resources.SKELETON1_D
-skeleton2.left_img = resources.SKELETON1_L
-skeleton2.right_img = resources.SKELETON1_R
 
 
 player = Player("Kevin", 1, 1, TILESIZE, 78, 34, 20, 22, 5, 10, 0, 7, 'd', 7, 100, 1, True)
@@ -118,8 +107,8 @@ level1.items.append(loader.peach1)
 level1.items.append(loader.armorh1)
 level1.items.append(loader.armorc1)
 
-level1.enemies.append(skeleton1)
-level1.enemies.append(skeleton2)
+level1.enemies.append(loader.skeleton1)
+level1.enemies.append(loader.skeleton2)
 
 hud_title_text = pygame.font.Font('fonts/ARCADE.TTF', 48)
 hud_player_name_surface = hud_title_text.render(player.name, True, Colors.GREEN)
