@@ -60,6 +60,8 @@ pygame.display.set_caption('Dunj')
 resources = Resources()
 loader = Loaders(resources, TILESIZE)
 
+attack_grid = AttackGrid()
+
 PLEASE_WAIT = pygame.image.load('images/misc/please_wait.png').convert_alpha()
 HELP_SCREEN = pygame.image.load('images/misc/help.png').convert_alpha()
 TILE_HIGHLIGHT = pygame.image.load('images/ground/highlight.png').convert_alpha()
@@ -371,7 +373,7 @@ while True:
             player_turn = True
 
     if player.attacking:
-        player.attack(tile_attack_direction)
+        player.attack_animation(tile_attack_direction)
         player.draw_self(DISPLAYSURF, TILESIZE)
         for enemy in level1.enemies:
             if enemy.x_pos == tile_highlight_active_x and enemy.y_pos == tile_highlight_active_y and deal_damage:

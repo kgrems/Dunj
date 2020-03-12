@@ -97,9 +97,38 @@ class Player(Actor):
             self.weapon.x_pos = self.x_pos - 1
             self.weapon.y_pos = self.y_pos
 
+    '''def attack(event):
+        if event.key == K_RIGHT and tile_highlight_active_x + 1 < player.x_pos + 2:
+            tile_highlight_active_x += 1
+        elif event.key == K_LEFT and tile_highlight_active_x - 1 > player.x_pos - 2:
+            tile_highlight_active_x -= 1
+        elif event.key == K_UP and tile_highlight_active_y - 1 > player.y_pos - 2:
+            tile_highlight_active_y -= 1
+        elif event.key == K_DOWN and tile_highlight_active_y + 1 < player.y_pos + 2:
+            tile_highlight_active_y += 1
+        elif event.key == K_SPACE:
+            if tile_highlight_active_x == player.x_pos - 1 and tile_highlight_active_y == player.y_pos - 1:
+                tile_attack_direction = 'ul'
+            if tile_highlight_active_x == player.x_pos and tile_highlight_active_y == player.y_pos - 1:
+                tile_attack_direction = 'um'
+            if tile_highlight_active_x == player.x_pos + 1 and tile_highlight_active_y == player.y_pos - 1:
+                tile_attack_direction = 'ur'
+            if tile_highlight_active_x == player.x_pos - 1 and tile_highlight_active_y == player.y_pos:
+                tile_attack_direction = 'ml'
+            if tile_highlight_active_x == player.x_pos and tile_highlight_active_y == player.y_pos:
+                tile_attack_direction = 'mm'
+            if tile_highlight_active_x == player.x_pos + 1 and tile_highlight_active_y == player.y_pos:
+                tile_attack_direction = 'mr'
+            if tile_highlight_active_x == player.x_pos - 1 and tile_highlight_active_y == player.y_pos + 1:
+                tile_attack_direction = 'bl'
+            if tile_highlight_active_x == player.x_pos and tile_highlight_active_y == player.y_pos + 1:
+                tile_attack_direction = 'bm'
+            if tile_highlight_active_x == player.x_pos + 1 and tile_highlight_active_y == player.y_pos + 1:
+                tile_attack_direction = 'br'
+    '''
     # need to rework this.  perhaps pass in a tuple (x,y) with the destination coords to make it more flexible for
     #   longer/shorter attacks?
-    def attack(self, tile_attack_direction):
+    def attack_animation(self, tile_attack_direction):
         if self.attacking:
             if self.attacking_forward:
                 if tile_attack_direction == 'ul':
