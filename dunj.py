@@ -236,8 +236,8 @@ while True:
                         player.moves = player.max_moves
 
                 # in attack mode, use arrows to target enemy
-                elif attack_mode and not show_help:
-                    attack_grid.draw(event, player, game_controller)
+                elif game_controller.attack_mode and not show_help:
+                    attack_grid.update(event, player, game_controller)
 
                 if event.key == K_e:
                     attack_grid.tile_highlight_active_x = player.x_pos
@@ -315,7 +315,7 @@ while True:
             player_turn = True
 
     if player.attacking:
-        player.attack_animation(attack_grid.tile_attack_direction)
+        player.attack_animation(attack_grid)
         player.draw_self(DISPLAYSURF, TILESIZE)
         for enemy in level1.enemies:
             if enemy.x_pos == attack_grid.tile_highlight_active_x and enemy.y_pos == attack_grid.tile_highlight_active_y and game_controller.deal_damage:
@@ -342,7 +342,7 @@ while True:
         player.y_pos = int(player.y_pos)
         player.draw_self(DISPLAYSURF, TILESIZE)
 
-    if attack_mode:
+    if game_controller.attack_mode:
         DISPLAYSURF.blit(TILE_HIGHLIGHT, attack_grid.tl)
         DISPLAYSURF.blit(TILE_HIGHLIGHT, attack_grid.tm)
         DISPLAYSURF.blit(TILE_HIGHLIGHT, attack_grid.tr)

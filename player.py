@@ -128,33 +128,33 @@ class Player(Actor):
     '''
     # need to rework this.  perhaps pass in a tuple (x,y) with the destination coords to make it more flexible for
     #   longer/shorter attacks?
-    def attack_animation(self, tile_attack_direction):
+    def attack_animation(self, attack_grid):
         if self.attacking:
             if self.attacking_forward:
-                if tile_attack_direction == 'ul':
+                if attack_grid.tile_attack_direction == 'ul':
                     self.x_pos -= self.attack_move_speed
                     self.y_pos -= self.attack_move_speed
-                elif tile_attack_direction == 'um':
+                elif attack_grid.tile_attack_direction == 'um':
                     self.direction = 'u'
                     self.y_pos -= self.attack_move_speed
-                elif tile_attack_direction == 'ur':
+                elif attack_grid.tile_attack_direction == 'ur':
                     self.x_pos += self.attack_move_speed
                     self.y_pos -= self.attack_move_speed
-                elif tile_attack_direction == 'ml':
+                elif attack_grid.tile_attack_direction == 'ml':
                     self.direction = 'l'
                     self.x_pos -= self.attack_move_speed
-                elif tile_attack_direction == 'mm':
+                elif attack_grid.tile_attack_direction == 'mm':
                     print('dunno what to do here')
-                elif tile_attack_direction == 'mr':
+                elif attack_grid.tile_attack_direction == 'mr':
                     self.direction = 'r'
                     self.x_pos += self.attack_move_speed
-                elif tile_attack_direction == 'bl':
+                elif attack_grid.tile_attack_direction == 'bl':
                     self.x_pos -= self.attack_move_speed
                     self.y_pos += self.attack_move_speed
-                elif tile_attack_direction == 'bm':
+                elif attack_grid.tile_attack_direction == 'bm':
                     self.direction = 'd'
                     self.y_pos += self.attack_move_speed
-                elif tile_attack_direction == 'br':
+                elif attack_grid.tile_attack_direction == 'br':
                     self.x_pos += self.attack_move_speed
                     self.y_pos += self.attack_move_speed
 
@@ -163,30 +163,30 @@ class Player(Actor):
                 if self.current_attack_move_distance == self.max_attack_move_distance:
                     self.attacking_forward = False
             else:
-                if tile_attack_direction == 'ul':
+                if attack_grid.tile_attack_direction == 'ul':
                     self.x_pos += self.attack_move_speed
                     self.y_pos += self.attack_move_speed
-                elif tile_attack_direction == 'um':
+                elif attack_grid.tile_attack_direction == 'um':
                     self.direction = 'u'
                     self.y_pos += self.attack_move_speed
-                elif tile_attack_direction == 'ur':
+                elif attack_grid.tile_attack_direction == 'ur':
                     self.x_pos -= self.attack_move_speed
                     self.y_pos += self.attack_move_speed
-                elif tile_attack_direction == 'ml':
+                elif attack_grid.tile_attack_direction == 'ml':
                     self.direction = 'l'
                     self.x_pos += self.attack_move_speed
-                elif tile_attack_direction == 'mm':
+                elif attack_grid.tile_attack_direction == 'mm':
                     print('dunno what to do here')
-                elif tile_attack_direction == 'mr':
+                elif attack_grid.tile_attack_direction == 'mr':
                     self.direction = 'r'
                     self.x_pos -= self.attack_move_speed
-                elif tile_attack_direction == 'bl':
+                elif attack_grid.tile_attack_direction == 'bl':
                     self.x_pos += self.attack_move_speed
                     self.y_pos -= self.attack_move_speed
-                elif tile_attack_direction == 'bm':
+                elif attack_grid.tile_attack_direction == 'bm':
                     self.direction = 'd'
                     self.y_pos -= self.attack_move_speed
-                elif tile_attack_direction == 'br':
+                elif attack_grid.tile_attack_direction == 'br':
                     self.x_pos -= self.attack_move_speed
                     self.y_pos -= self.attack_move_speed
 
