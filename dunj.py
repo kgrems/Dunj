@@ -68,6 +68,7 @@ player.down_img = resources.PLAYER_B_D
 player.left_img = resources.PLAYER_B_L
 player.right_img = resources.PLAYER_B_R
 
+
 hud = Hud(player)
 hud.draw(DISPLAYSURF, TILESIZE, MAPHEIGHT)
 
