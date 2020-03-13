@@ -1,15 +1,11 @@
 #http://usingpython.com/events/
 import pygame, sys, random, time, types, math
-from enum import Enum
 
-from health import *
-from weapon import *
+from attack_grid import AttackGrid
 from player import *
 from level import *
-from armor import *
-from enemy import *
-from colors import *
 from hud import *
+from game_controller import *
 from loaders import *
 from pygame.locals import *
 
@@ -46,7 +42,6 @@ VEL = 1
 show_help = False
 player_turn = True
 collect_sound = pygame.mixer.Sound("sounds/collect_coin_01.wav")
-actionKeyPressed = False
 
 level1 = Level("1.lvl", MAPWIDTH, MAPHEIGHT, TILESIZE)
 
@@ -57,33 +52,15 @@ pygame.display.set_icon(FAVICON)
 
 pygame.display.set_caption('Dunj')
 
+game_controller = GameController()
 resources = Resources()
 loader = Loaders(resources, TILESIZE)
-
 attack_grid = AttackGrid()
 
 PLEASE_WAIT = pygame.image.load('images/misc/please_wait.png').convert_alpha()
 HELP_SCREEN = pygame.image.load('images/misc/help.png').convert_alpha()
 TILE_HIGHLIGHT = pygame.image.load('images/ground/highlight.png').convert_alpha()
 TILE_HIGHLIGHT_ACTIVE = pygame.image.load('images/ground/highlight_active.png').convert_alpha()
-
-tile_highlight_active_x = 0
-tile_highlight_active_y = 0
-tile_attack_direction = ''
-
-attack_grid_tl = (0, 0)
-attack_grid_tm = (0, 0)
-attack_grid_tr = (0, 0)
-attack_grid_ml = (0, 0)
-attack_grid_mm = (0, 0)
-attack_grid_mr = (0, 0)
-attack_grid_bl = (0, 0)
-attack_grid_bm = (0, 0)
-attack_grid_br = (0, 0)
-
-
-
-
 
 player = Player("Kevin", 1, 1, TILESIZE, 78, 34, 20, 22, 5, 10, 0, 7, 'd', 7, 100, 1, True)
 player.up_img = resources.PLAYER_B_U
@@ -99,8 +76,6 @@ PLAYER_D = resources.PLAYER_B_D
 PLAYER_L = resources.PLAYER_B_L
 PLAYER_R = resources.PLAYER_B_R
 
-
-
 level1.items.append(loader.sword1)
 level1.items.append(loader.sword2)
 level1.items.append(loader.berries1)
@@ -115,9 +90,6 @@ level1.enemies.append(loader.skeleton2)
 hud_title_text = pygame.font.Font('fonts/ARCADE.TTF', 48)
 hud_player_name_surface = hud_title_text.render(player.name, True, Colors.GREEN)
 hud_data_text = pygame.font.Font('fonts/ARCADE.TTF', 20)
-
-deal_damage = False
-attacking = False
 
 # MAIN GAME LOOP
 while True:
@@ -145,8 +117,8 @@ while True:
             sys.exit()
     
         if player_turn:
-            if event.type == KEYDOWN and actionKeyPressed is False:
-                if not attack_mode and not show_help:
+            if event.type == KEYDOWN and game_controller.action_key_pressed is False:
+                if not game_controller.attack_mode and not show_help:
                     # only allow ANY player actions if there are moves left?
 
                     if event.key == K_RIGHT:
@@ -154,7 +126,7 @@ while True:
                         if player.x_pos + 1 < MAPWIDTH and level1.textures[level1.tilemap[player.y_pos][player.x_pos+1]][1]\
                                 == 1 and player.moves > 0:
                             player.x_pos += 1
-                            actionKeyPressed = True
+                            game_controller.action_key_pressed = True
                             player.moves -= 1
                             hud.system_message = 'Move right'
                             player.item_dropped = False
@@ -163,7 +135,7 @@ while True:
                         if player.x_pos > 0 and level1.textures[level1.tilemap[player.y_pos][player.x_pos-1]][1] == 1 and \
                                 player.moves > 0:
                             player.x_pos -= 1
-                            actionKeyPressed = True
+                            game_controller.action_key_pressed = True
                             player.moves -= 1
                             hud.system_message = 'Move left'
                             player.item_dropped = False
@@ -172,7 +144,7 @@ while True:
                         if player.y_pos > 0 and level1.textures[level1.tilemap[player.y_pos-1][player.x_pos]][1] == 1 \
                                 and player.moves > 0:
                             player.y_pos -= 1
-                            actionKeyPressed = True
+                            game_controller.action_key_pressed = True
                             player.moves -= 1
                             hud.system_message = 'Move up'
                             player.item_dropped = False
@@ -182,77 +154,77 @@ while True:
                                 level1.textures[level1.tilemap[player.y_pos+1][player.x_pos]][1] == 1 \
                                 and player.moves > 0:
                             player.y_pos += 1
-                            actionKeyPressed = True
+                            game_controller.action_key_pressed = True
                             player.moves -= 1
                             hud.system_message = 'Move down'
                             player.item_dropped = False
 
                     # inventory slot keys
                     elif event.key == K_1:
-                        actionKeyPressed = True
+                        game_controller.action_key_pressed = True
                         try:
                             player.inventory[0].use(player)
                             player.inventory.remove(player.inventory[0])
                         except IndexError:
                             hud.system_message = 'No item in slot'
                     elif event.key == K_2:
-                        actionKeyPressed = True
+                        game_controller.action_key_pressed = True
                         try:
                             player.inventory[1].use(player)
                             player.inventory.remove(player.inventory[1])
                         except IndexError:
                             hud.system_message = 'No item in slot'
                     elif event.key == K_3:
-                        actionKeyPressed = True
+                        game_controller.action_key_pressed = True
                         try:
                             player.inventory[2].use(player)
                             player.inventory.remove(player.inventory[2])
                         except IndexError:
                             hud.system_message = 'No item in slot'
                     elif event.key == K_4:
-                        actionKeyPressed = True
+                        game_controller.action_key_pressed = True
                         try:
                             player.inventory[3].use(player)
                             player.inventory.remove(player.inventory[3])
                         except IndexError:
                             hud.system_message = 'No item in slot'
                     elif event.key == K_5:
-                        actionKeyPressed = True
+                        game_controller.action_key_pressed = True
                         try:
                             player.inventory[4].use(player)
                             player.inventory.remove(player.inventory[4])
                         except IndexError:
                             hud.system_message = 'No item in slot'
                     elif event.key == K_6:
-                        actionKeyPressed = True
+                        game_controller.action_key_pressed = True
                         try:
                             player.inventory[5].use(player)
                             player.inventory.remove(player.inventory[5])
                         except IndexError:
                             hud.system_message = 'No item in slot'
                     elif event.key == K_7:
-                        actionKeyPressed = True
+                        game_controller.action_key_pressed = True
                         try:
                             player.inventory[6].use(player)
                             player.inventory.remove(player.inventory[6])
                         except IndexError:
                             hud.system_message = 'No item in slot'
                     elif event.key == K_8:
-                        actionKeyPressed = True
+                        game_controller.action_key_pressed = True
                         try:
                             player.inventory[7].use(player)
                             player.inventory.remove(player.inventory[7])
                         except IndexError:
                             hud.system_message = 'No item in slot'
                     elif event.key == K_9:
-                        actionKeyPressed = True
+                        game_controller.action_key_pressed = True
                         try:
                             player.inventory[8].use(player)
                             player.inventory.remove(player.inventory[8])
                         except IndexError:
                             hud.system_message = 'No item in slot'
                     elif event.key == K_0:
-                        actionKeyPressed = True
+                        game_controller.action_key_pressed = True
                         try:
                             player.inventory[9].use(player)
                             player.inventory.remove(player.inventory[9])
@@ -265,62 +237,32 @@ while True:
 
                 # in attack mode, use arrows to target enemy
                 elif attack_mode and not show_help:
-                    if event.key == K_RIGHT and tile_highlight_active_x + 1 < player.x_pos + 2:
-                        tile_highlight_active_x += 1
-                    elif event.key == K_LEFT and tile_highlight_active_x - 1 > player.x_pos - 2:
-                        tile_highlight_active_x -= 1
-                    elif event.key == K_UP and tile_highlight_active_y - 1 > player.y_pos - 2:
-                        tile_highlight_active_y -= 1
-                    elif event.key == K_DOWN and tile_highlight_active_y + 1 < player.y_pos + 2:
-                        tile_highlight_active_y += 1
-                    elif event.key == K_SPACE:
-                        if tile_highlight_active_x == player.x_pos - 1 and tile_highlight_active_y == player.y_pos - 1:
-                            tile_attack_direction = 'ul'
-                        if tile_highlight_active_x == player.x_pos and tile_highlight_active_y == player.y_pos - 1:
-                            tile_attack_direction = 'um'
-                        if tile_highlight_active_x == player.x_pos + 1 and tile_highlight_active_y == player.y_pos - 1:
-                            tile_attack_direction = 'ur'
-                        if tile_highlight_active_x == player.x_pos - 1 and tile_highlight_active_y == player.y_pos:
-                            tile_attack_direction = 'ml'
-                        if tile_highlight_active_x == player.x_pos and tile_highlight_active_y == player.y_pos:
-                            tile_attack_direction = 'mm'
-                        if tile_highlight_active_x == player.x_pos + 1 and tile_highlight_active_y == player.y_pos:
-                            tile_attack_direction = 'mr'
-                        if tile_highlight_active_x == player.x_pos - 1 and tile_highlight_active_y == player.y_pos + 1:
-                            tile_attack_direction = 'bl'
-                        if tile_highlight_active_x == player.x_pos and tile_highlight_active_y == player.y_pos + 1:
-                            tile_attack_direction = 'bm'
-                        if tile_highlight_active_x == player.x_pos + 1 and tile_highlight_active_y == player.y_pos + 1:
-                            tile_attack_direction = 'br'
-
-                        actionKeyPressed = True
-                        player.attacking = True
-                        deal_damage = True
+                    attack_grid.draw(event, player, game_controller)
 
                 if event.key == K_e:
-                    tile_highlight_active_x = player.x_pos
-                    tile_highlight_active_y = player.y_pos
+                    attack_grid.tile_highlight_active_x = player.x_pos
+                    attack_grid.tile_highlight_active_y = player.y_pos
 
                     # calc attack grid cell positions
-                    attack_grid_tl = ((player.x_pos - 1) * TILESIZE, (player.y_pos - 1) * TILESIZE)
-                    attack_grid_tm = (player.x_pos * TILESIZE, (player.y_pos - 1) * TILESIZE)
-                    attack_grid_tr = ((player.x_pos + 1) * TILESIZE, (player.y_pos - 1) * TILESIZE)
-                    attack_grid_ml = ((player.x_pos - 1) * TILESIZE, player.y_pos * TILESIZE)
-                    attack_grid_mm = (player.x_pos * TILESIZE, player.y_pos * TILESIZE)
-                    attack_grid_mr = ((player.x_pos + 1) * TILESIZE, player.y_pos * TILESIZE)
-                    attack_grid_bl = ((player.x_pos - 1) * TILESIZE, (player.y_pos + 1) * TILESIZE)
-                    attack_grid_bm = (player.x_pos * TILESIZE, (player.y_pos + 1) * TILESIZE)
-                    attack_grid_br = ((player.x_pos + 1) * TILESIZE, (player.y_pos + 1) * TILESIZE)
+                    attack_grid.tl = ((player.x_pos - 1) * TILESIZE, (player.y_pos - 1) * TILESIZE)
+                    attack_grid.tm = (player.x_pos * TILESIZE, (player.y_pos - 1) * TILESIZE)
+                    attack_grid.tr = ((player.x_pos + 1) * TILESIZE, (player.y_pos - 1) * TILESIZE)
+                    attack_grid.ml = ((player.x_pos - 1) * TILESIZE, player.y_pos * TILESIZE)
+                    attack_grid.mm = (player.x_pos * TILESIZE, player.y_pos * TILESIZE)
+                    attack_grid.mr = ((player.x_pos + 1) * TILESIZE, player.y_pos * TILESIZE)
+                    attack_grid.bl = ((player.x_pos - 1) * TILESIZE, (player.y_pos + 1) * TILESIZE)
+                    attack_grid.bm = (player.x_pos * TILESIZE, (player.y_pos + 1) * TILESIZE)
+                    attack_grid.br = ((player.x_pos + 1) * TILESIZE, (player.y_pos + 1) * TILESIZE)
 
-                    actionKeyPressed = True
-                    attack_mode = not attack_mode
+                    game_controller.action_key_pressed = True
+                    game_controller.attack_mode = not game_controller.attack_mode
 
                 if event.key == K_SLASH:
-                    actionKeyPressed = True
+                    game_controller.action_key_pressed = True
                     show_help = not show_help
 
             if event.type == KEYUP:
-                actionKeyPressed = False
+                game_controller.action_key_pressed = False
 
             # check player collision on level items
             for item in level1.items:
@@ -343,7 +285,7 @@ while True:
                             player.draw_self(DISPLAYSURF, TILESIZE)
                             pygame.display.update()
                             if event.key == K_y:
-                                actionKeyPressed = True
+                                game_controller.action_key_pressed = True
                                 pygame.mixer.Sound.play(collect_sound)
                                 hud.system_message = "Obtained " + item.name
 
@@ -373,11 +315,11 @@ while True:
             player_turn = True
 
     if player.attacking:
-        player.attack_animation(tile_attack_direction)
+        player.attack_animation(attack_grid.tile_attack_direction)
         player.draw_self(DISPLAYSURF, TILESIZE)
         for enemy in level1.enemies:
-            if enemy.x_pos == tile_highlight_active_x and enemy.y_pos == tile_highlight_active_y and deal_damage:
-                deal_damage = False
+            if enemy.x_pos == attack_grid.tile_highlight_active_x and enemy.y_pos == attack_grid.tile_highlight_active_y and game_controller.deal_damage:
+                game_controller.deal_damage = False
                 if player.weapon is not None:
                     attack_variance_increase = random.choice([True, False])
                     if attack_variance_increase:
@@ -401,16 +343,16 @@ while True:
         player.draw_self(DISPLAYSURF, TILESIZE)
 
     if attack_mode:
-        DISPLAYSURF.blit(TILE_HIGHLIGHT, attack_grid_tl)
-        DISPLAYSURF.blit(TILE_HIGHLIGHT, attack_grid_tm)
-        DISPLAYSURF.blit(TILE_HIGHLIGHT, attack_grid_tr)
-        DISPLAYSURF.blit(TILE_HIGHLIGHT, attack_grid_ml)
-        DISPLAYSURF.blit(TILE_HIGHLIGHT, attack_grid_mm)
-        DISPLAYSURF.blit(TILE_HIGHLIGHT, attack_grid_mr)
-        DISPLAYSURF.blit(TILE_HIGHLIGHT, attack_grid_bl)
-        DISPLAYSURF.blit(TILE_HIGHLIGHT, attack_grid_bm)
-        DISPLAYSURF.blit(TILE_HIGHLIGHT, attack_grid_br)
-        DISPLAYSURF.blit(TILE_HIGHLIGHT_ACTIVE, (tile_highlight_active_x * TILESIZE,tile_highlight_active_y * TILESIZE))
+        DISPLAYSURF.blit(TILE_HIGHLIGHT, attack_grid.tl)
+        DISPLAYSURF.blit(TILE_HIGHLIGHT, attack_grid.tm)
+        DISPLAYSURF.blit(TILE_HIGHLIGHT, attack_grid.tr)
+        DISPLAYSURF.blit(TILE_HIGHLIGHT, attack_grid.ml)
+        DISPLAYSURF.blit(TILE_HIGHLIGHT, attack_grid.mm)
+        DISPLAYSURF.blit(TILE_HIGHLIGHT, attack_grid.mr)
+        DISPLAYSURF.blit(TILE_HIGHLIGHT, attack_grid.bl)
+        DISPLAYSURF.blit(TILE_HIGHLIGHT, attack_grid.bm)
+        DISPLAYSURF.blit(TILE_HIGHLIGHT, attack_grid.br)
+        DISPLAYSURF.blit(TILE_HIGHLIGHT_ACTIVE, (attack_grid.tile_highlight_active_x * TILESIZE, attack_grid.tile_highlight_active_y * TILESIZE))
 
     if show_help:
         DISPLAYSURF.blit(HELP_SCREEN, (HELP_X, HELP_Y))
