@@ -40,9 +40,9 @@ class Player(Actor):
             if self.armor_legs is not None:
                 surf.blit(self.armor_legs.d_img, pos)
             if self.weapon is not None:
-                surf.blit(self.weapon.d_img,pos)
+                surf.blit(self.weapon.d_img, pos)
         elif self.direction == 'l':
-            surf.blit(self.left_img,pos)
+            surf.blit(self.left_img, pos)
             if self.armor_head is not None:
                 surf.blit(self.armor_head.l_img,pos)
             if self.armor_chest is not None:
@@ -50,27 +50,27 @@ class Player(Actor):
             if self.armor_legs is not None:
                 surf.blit(self.armor_legs.l_img, pos)
             if self.weapon is not None:
-                surf.blit(self.weapon.l_img,pos)
+                surf.blit(self.weapon.l_img, pos)
         elif self.direction == 'r':
-            surf.blit(self.right_img,pos)
+            surf.blit(self.right_img, pos)
             if self.armor_head is not None:
-                surf.blit(self.armor_head.r_img,pos)
+                surf.blit(self.armor_head.r_img, pos)
             if self.armor_chest is not None:
                 surf.blit(self.armor_chest.r_img, pos)
             if self.armor_legs is not None:
                 surf.blit(self.armor_legs.r_img, pos)
             if self.weapon is not None:
-                surf.blit(self.weapon.r_img,pos)
+                surf.blit(self.weapon.r_img, pos)
         elif self.direction == 'u':
             surf.blit(self.up_img,pos)
             if self.armor_head is not None:
-                surf.blit(self.armor_head.u_img,pos)
+                surf.blit(self.armor_head.u_img, pos)
             if self.armor_chest is not None:
                 surf.blit(self.armor_chest.u_img, pos)
             if self.armor_legs is not None:
                 surf.blit(self.armor_legs.u_img, pos)
             if self.weapon is not None:
-                surf.blit(self.weapon.u_img,pos)
+                surf.blit(self.weapon.u_img, pos)
 
     def get_defense(self):
         result = 0
@@ -97,35 +97,6 @@ class Player(Actor):
             self.weapon.x_pos = self.x_pos - 1
             self.weapon.y_pos = self.y_pos
 
-    '''def attack(event):
-        if event.key == K_RIGHT and tile_highlight_active_x + 1 < player.x_pos + 2:
-            tile_highlight_active_x += 1
-        elif event.key == K_LEFT and tile_highlight_active_x - 1 > player.x_pos - 2:
-            tile_highlight_active_x -= 1
-        elif event.key == K_UP and tile_highlight_active_y - 1 > player.y_pos - 2:
-            tile_highlight_active_y -= 1
-        elif event.key == K_DOWN and tile_highlight_active_y + 1 < player.y_pos + 2:
-            tile_highlight_active_y += 1
-        elif event.key == K_SPACE:
-            if tile_highlight_active_x == player.x_pos - 1 and tile_highlight_active_y == player.y_pos - 1:
-                tile_attack_direction = 'ul'
-            if tile_highlight_active_x == player.x_pos and tile_highlight_active_y == player.y_pos - 1:
-                tile_attack_direction = 'um'
-            if tile_highlight_active_x == player.x_pos + 1 and tile_highlight_active_y == player.y_pos - 1:
-                tile_attack_direction = 'ur'
-            if tile_highlight_active_x == player.x_pos - 1 and tile_highlight_active_y == player.y_pos:
-                tile_attack_direction = 'ml'
-            if tile_highlight_active_x == player.x_pos and tile_highlight_active_y == player.y_pos:
-                tile_attack_direction = 'mm'
-            if tile_highlight_active_x == player.x_pos + 1 and tile_highlight_active_y == player.y_pos:
-                tile_attack_direction = 'mr'
-            if tile_highlight_active_x == player.x_pos - 1 and tile_highlight_active_y == player.y_pos + 1:
-                tile_attack_direction = 'bl'
-            if tile_highlight_active_x == player.x_pos and tile_highlight_active_y == player.y_pos + 1:
-                tile_attack_direction = 'bm'
-            if tile_highlight_active_x == player.x_pos + 1 and tile_highlight_active_y == player.y_pos + 1:
-                tile_attack_direction = 'br'
-    '''
     # need to rework this.  perhaps pass in a tuple (x,y) with the destination coords to make it more flexible for
     #   longer/shorter attacks?
     def attack_animation(self, attack_grid):
