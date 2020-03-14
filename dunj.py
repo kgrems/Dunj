@@ -156,6 +156,7 @@ while True:
                             hud.system_message = 'Move down'
                             player.item_dropped = False
 
+
                     # inventory slot keys
                     elif event.key == K_1:
                         game_controller.action_key_pressed = True
