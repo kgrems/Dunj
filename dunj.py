@@ -84,6 +84,7 @@ level1.items.append(loader.berries2)
 level1.items.append(loader.peach1)
 level1.items.append(loader.armorh1)
 level1.items.append(loader.armorc1)
+level1.items.append(loader.armorc2)
 
 level1.enemies.append(loader.skeleton1)
 level1.enemies.append(loader.skeleton2)
@@ -294,15 +295,64 @@ while True:
                         if item.armor_type == 'h':
                             if player.armor_head is None:
                                 player.armor_head = item
+                                pygame.mixer.Sound.play(collect_sound)
+                                hud.system_message = "Obtained " + item.name
+                                level1.items.remove(item)
+                            else:
+                                hud.system_message = "Swap head armor? (y/n)"
+                                player.draw_self(DISPLAYSURF, TILESIZE)
+                                pygame.display.update()
+                                if event.key == K_y:
+                                    game_controller.action_key_pressed = True
+                                    pygame.mixer.Sound.play(collect_sound)
+                                    hud.system_message = "Obtained " + item.name
+
+                                    player.drop_armor_head()
+
+                                    level1.items.append(player.armor_head)
+                                    level1.items.remove(item)
+                                    player.armor_head = item
                         elif item.armor_type == 'c':
                             if player.armor_chest is None:
                                 player.armor_chest = item
+                                pygame.mixer.Sound.play(collect_sound)
+                                hud.system_message = "Obtained " + item.name
+                                level1.items.remove(item)
+                            else:
+                                hud.system_message = "Swap chest armor? (y/n)"
+                                player.draw_self(DISPLAYSURF, TILESIZE)
+                                pygame.display.update()
+                                if event.key == K_y:
+                                    game_controller.action_key_pressed = True
+                                    pygame.mixer.Sound.play(collect_sound)
+                                    hud.system_message = "Obtained " + item.name
+
+                                    player.drop_armor_chest()
+
+                                    level1.items.append(player.armor_chest)
+                                    level1.items.remove(item)
+                                    player.armor_chest = item
                         elif item.armor_type == 'l':
                             if player.armor_legs is None:
                                 player.armor_legs = item
-                        pygame.mixer.Sound.play(collect_sound)
-                        hud.system_message = "Obtained " + item.name
-                        level1.items.remove(item)
+                                pygame.mixer.Sound.play(collect_sound)
+                                hud.system_message = "Obtained " + item.name
+                                level1.items.remove(item)
+                            else:
+                                hud.system_message = "Swap leg armor? (y/n)"
+                                player.draw_self(DISPLAYSURF, TILESIZE)
+                                pygame.display.update()
+                                if event.key == K_y:
+                                    game_controller.action_key_pressed = True
+                                    pygame.mixer.Sound.play(collect_sound)
+                                    hud.system_message = "Obtained " + item.name
+
+                                    player.drop_armor_legs()
+
+                                    level1.items.append(player.armor_legs)
+                                    level1.items.remove(item)
+                                    player.armor_legs = item
+
 
         else:
             DISPLAYSURF.blit(PLEASE_WAIT, (((MAPWIDTH*TILESIZE)/2)-(PLEASE_WAIT.get_width()/2),

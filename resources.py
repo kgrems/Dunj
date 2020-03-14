@@ -23,7 +23,12 @@ class Resources:
         self.C1_D = pygame.image.load('images/armor/c1/c1_d.png').convert_alpha()
         self.C1_L = pygame.image.load('images/armor/c1/c1_l.png').convert_alpha()
         self.C1_R = pygame.image.load('images/armor/c1/c1_r.png').convert_alpha()
-        
+
+        self.C2_U = pygame.image.load('images/armor/c2/c2_u.png').convert_alpha()
+        self.C2_D = pygame.image.load('images/armor/c2/c2_d.png').convert_alpha()
+        self.C2_L = pygame.image.load('images/armor/c2/c2_l.png').convert_alpha()
+        self.C2_R = pygame.image.load('images/armor/c2/c2_r.png').convert_alpha()
+
         #PLAYER
         self.PLAYER_B_U = pygame.image.load('images/player/base/player_u.png').convert_alpha()
         self.PLAYER_B_D = pygame.image.load('images/player/base/player_d.png').convert_alpha()

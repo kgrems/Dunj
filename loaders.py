@@ -17,7 +17,9 @@ class Loaders:
         self.armorh1 = Armor(3, 4, base_size,"Cloth Head Armor", pygame.image.load('images/armor/h1/h1.png').convert_alpha(), True, 5, 'h1', pygame.image.load('images/armor/h1/h1.png').convert_alpha(), 5, 'h', resources.H1_U, resources.H1_D, resources.H1_L, resources.H1_R)
         
         self.armorc1 = Armor(3, 5, base_size,"Hard Chest Armor", pygame.image.load('images/armor/c1/c1.png').convert_alpha(), True, 10, 'c1', pygame.image.load('images/armor/c1/c1.png').convert_alpha(), 10, 'c', resources.C1_U, resources.C1_D, resources.C1_L, resources.C1_R)
-        
+
+        self.armorc2 = Armor(8, 5, base_size,"Soft Wizard Armor", pygame.image.load('images/armor/c2/c2.png').convert_alpha(), True, 7, 'c2', pygame.image.load('images/armor/c2/c2.png').convert_alpha(), 7, 'c', resources.C2_U, resources.C2_D, resources.C2_L, resources.C2_R)
+
         #ENEMIES
         self.skeleton1 = Enemy("Weak Skeleton", 10, 10, base_size, 100, 15, 10, 10, 13, 2, 5, 'd', 5, 10, 15, True)
         self.skeleton1.up_img = resources.SKELETON1_U

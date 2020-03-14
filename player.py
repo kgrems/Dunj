@@ -97,6 +97,48 @@ class Player(Actor):
             self.weapon.x_pos = self.x_pos - 1
             self.weapon.y_pos = self.y_pos
 
+    def drop_armor_chest(self):
+        if self.direction == 'u':
+            self.armor_chest.x_pos = self.x_pos
+            self.armor_chest.y_pos = self.y_pos + 1
+        elif self.direction == 'd':
+            self.armor_chest.x_pos = self.x_pos
+            self.armor_chest.y_pos = self.y_pos - 1
+        elif self.direction == 'l':
+            self.armor_chest.x_pos = self.x_pos + 1
+            self.armor_chest.y_pos = self.y_pos
+        elif self.direction == 'r':
+            self.armor_chest.x_pos = self.x_pos - 1
+            self.armor_chest.y_pos = self.y_pos
+
+    def drop_armor_head(self):
+        if self.direction == 'u':
+            self.armor_head.x_pos = self.x_pos
+            self.armor_head.y_pos = self.y_pos + 1
+        elif self.direction == 'd':
+            self.armor_head.x_pos = self.x_pos
+            self.armor_head.y_pos = self.y_pos - 1
+        elif self.direction == 'l':
+            self.armor_head.x_pos = self.x_pos + 1
+            self.armor_head.y_pos = self.y_pos
+        elif self.direction == 'r':
+            self.armor_head.x_pos = self.x_pos - 1
+            self.armor_head.y_pos = self.y_pos
+
+    def drop_armor_legs(self):
+        if self.direction == 'u':
+            self.armor_legs.x_pos = self.x_pos
+            self.armor_legs.y_pos = self.y_pos + 1
+        elif self.direction == 'd':
+            self.armor_legs.x_pos = self.x_pos
+            self.armor_legs.y_pos = self.y_pos - 1
+        elif self.direction == 'l':
+            self.armor_legs.x_pos = self.x_pos + 1
+            self.armor_legs.y_pos = self.y_pos
+        elif self.direction == 'r':
+            self.armor_legs.x_pos = self.x_pos - 1
+            self.armor_legs.y_pos = self.y_pos
+
     # need to rework this.  perhaps pass in a tuple (x,y) with the destination coords to make it more flexible for
     #   longer/shorter attacks?
     def attack_animation(self, attack_grid):
