@@ -1,5 +1,5 @@
 #http://usingpython.com/events/
-import pygame, sys, random, time, types, math
+import sys, random
 
 from attack_grid import AttackGrid
 from player import *
@@ -22,8 +22,6 @@ ai_delay = False
 input_lock = False
 attack_mode = False
 attack_variance_increase = False
-proj_x = 0
-proj_y = 0
 
 TILESIZE = 40
 MAPWIDTH = 40
@@ -35,9 +33,7 @@ HELP_X = 120
 HELP_Y = 84
 
 FPS = 30
-fpsClock = pygame.time.Clock()
-
-VEL = 1
+fps = pygame.time.Clock()
 
 show_help = False
 player_turn = True
@@ -46,21 +42,16 @@ collect_sound = pygame.mixer.Sound("sounds/collect_coin_01.wav")
 level1 = Level("1.lvl", MAPWIDTH, MAPHEIGHT, TILESIZE)
 
 DISPLAYSURF = pygame.display.set_mode((MAPWIDTH*TILESIZE, MAPHEIGHT*TILESIZE + HUD_HEIGHT*TILESIZE))
-FAVICON = pygame.image.load('images/misc/favicon.png').convert_alpha()
-
-pygame.display.set_icon(FAVICON)
-
-pygame.display.set_caption('Dunj')
 
 game_controller = GameController()
 resources = Resources()
 loader = Loaders(resources, TILESIZE)
 attack_grid = AttackGrid()
 
-PLEASE_WAIT = pygame.image.load('images/misc/please_wait.png').convert_alpha()
-HELP_SCREEN = pygame.image.load('images/misc/help.png').convert_alpha()
-TILE_HIGHLIGHT = pygame.image.load('images/ground/highlight.png').convert_alpha()
-TILE_HIGHLIGHT_ACTIVE = pygame.image.load('images/ground/highlight_active.png').convert_alpha()
+
+pygame.display.set_icon(resources.FAVICON)
+
+pygame.display.set_caption('Dunj')
 
 player = Player("Kevin", 1, 1, TILESIZE, 78, 34, 20, 22, 5, 10, 0, 7, 'd', 7, 100, 1, True)
 player.up_img = resources.PLAYER_B_U
@@ -156,7 +147,6 @@ while True:
                             hud.system_message = 'Move down'
                             player.item_dropped = False
 
-
                     # inventory slot keys
                     elif event.key == K_1:
                         game_controller.action_key_pressed = True
@@ -242,15 +232,7 @@ while True:
                     attack_grid.tile_highlight_active_y = player.y_pos
 
                     # calc attack grid cell positions
-                    attack_grid.tl = ((player.x_pos - 1) * TILESIZE, (player.y_pos - 1) * TILESIZE)
-                    attack_grid.tm = (player.x_pos * TILESIZE, (player.y_pos - 1) * TILESIZE)
-                    attack_grid.tr = ((player.x_pos + 1) * TILESIZE, (player.y_pos - 1) * TILESIZE)
-                    attack_grid.ml = ((player.x_pos - 1) * TILESIZE, player.y_pos * TILESIZE)
-                    attack_grid.mm = (player.x_pos * TILESIZE, player.y_pos * TILESIZE)
-                    attack_grid.mr = ((player.x_pos + 1) * TILESIZE, player.y_pos * TILESIZE)
-                    attack_grid.bl = ((player.x_pos - 1) * TILESIZE, (player.y_pos + 1) * TILESIZE)
-                    attack_grid.bm = (player.x_pos * TILESIZE, (player.y_pos + 1) * TILESIZE)
-                    attack_grid.br = ((player.x_pos + 1) * TILESIZE, (player.y_pos + 1) * TILESIZE)
+                    attack_grid.place(player, TILESIZE)
 
                     game_controller.action_key_pressed = True
                     game_controller.attack_mode = not game_controller.attack_mode
@@ -354,10 +336,9 @@ while True:
                                     level1.items.remove(item)
                                     player.armor_legs = item
 
-
         else:
-            DISPLAYSURF.blit(PLEASE_WAIT, (((MAPWIDTH*TILESIZE)/2)-(PLEASE_WAIT.get_width()/2),
-                                           ((MAPHEIGHT*TILESIZE)/2)-PLEASE_WAIT.get_height()/2))
+            DISPLAYSURF.blit(resources.PLEASE_WAIT, (((MAPWIDTH*TILESIZE)/2)-(resources.PLEASE_WAIT.get_width()/2),
+                                           ((MAPHEIGHT*TILESIZE)/2)-resources.PLEASE_WAIT.get_height()/2))
             ai_delay = True
             player_turn = True
 
@@ -390,19 +371,10 @@ while True:
         player.draw_self(DISPLAYSURF, TILESIZE)
 
     if game_controller.attack_mode:
-        DISPLAYSURF.blit(TILE_HIGHLIGHT, attack_grid.tl)
-        DISPLAYSURF.blit(TILE_HIGHLIGHT, attack_grid.tm)
-        DISPLAYSURF.blit(TILE_HIGHLIGHT, attack_grid.tr)
-        DISPLAYSURF.blit(TILE_HIGHLIGHT, attack_grid.ml)
-        DISPLAYSURF.blit(TILE_HIGHLIGHT, attack_grid.mm)
-        DISPLAYSURF.blit(TILE_HIGHLIGHT, attack_grid.mr)
-        DISPLAYSURF.blit(TILE_HIGHLIGHT, attack_grid.bl)
-        DISPLAYSURF.blit(TILE_HIGHLIGHT, attack_grid.bm)
-        DISPLAYSURF.blit(TILE_HIGHLIGHT, attack_grid.br)
-        DISPLAYSURF.blit(TILE_HIGHLIGHT_ACTIVE, (attack_grid.tile_highlight_active_x * TILESIZE, attack_grid.tile_highlight_active_y * TILESIZE))
+        attack_grid.draw(DISPLAYSURF, TILESIZE)
 
     if show_help:
-        DISPLAYSURF.blit(HELP_SCREEN, (HELP_X, HELP_Y))
+        DISPLAYSURF.blit(resources.HELP_SCREEN, (HELP_X, HELP_Y))
 
     pygame.display.update()
 
@@ -410,4 +382,4 @@ while True:
         pygame.time.delay(2000)
         ai_delay = False
     
-    fpsClock.tick(FPS)
+    fps.tick(FPS)

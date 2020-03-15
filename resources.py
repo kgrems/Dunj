@@ -42,5 +42,6 @@ class Resources:
         self.SKELETON1_R = pygame.image.load('images/enemies/skeleton1_r.png').convert_alpha()
 
         #MISC
-        TILE_HIGHLIGHT = pygame.image.load('images/ground/highlight.png').convert_alpha()
-        TILE_HIGHLIGHT_ACTIVE = pygame.image.load('images/ground/highlight_active.png').convert_alpha()
+        self.FAVICON = pygame.image.load('images/misc/favicon.png').convert_alpha()
+        self.PLEASE_WAIT = pygame.image.load('images/misc/please_wait.png').convert_alpha()
+        self.HELP_SCREEN = pygame.image.load('images/misc/help.png').convert_alpha()

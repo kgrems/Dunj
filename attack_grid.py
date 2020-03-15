@@ -1,4 +1,5 @@
 from pygame.locals import *
+import pygame
 
 
 class AttackGrid:
@@ -19,6 +20,9 @@ class AttackGrid:
         self.bl = (0, 0)
         self.bm = (0, 0)
         self.br = (0, 0)
+
+        self.tile_highlight = pygame.image.load('images/ground/highlight.png').convert_alpha()
+        self.tile_highlight_active = pygame.image.load('images/ground/highlight_active.png').convert_alpha()
 
     def update(self, event, player, game_controller):
         if event.key == K_RIGHT and self.tile_highlight_active_x + 1 < player.x_pos + 2:
@@ -52,3 +56,26 @@ class AttackGrid:
             game_controller.action_key_pressed = True
             player.attacking = True
             game_controller.deal_damage = True
+
+    def place(self, player, tile_size):
+        self.tl = ((player.x_pos - 1) * tile_size, (player.y_pos - 1) * tile_size)
+        self.tm = (player.x_pos * tile_size, (player.y_pos - 1) * tile_size)
+        self.tr = ((player.x_pos + 1) * tile_size, (player.y_pos - 1) * tile_size)
+        self.ml = ((player.x_pos - 1) * tile_size, player.y_pos * tile_size)
+        self.mm = (player.x_pos * tile_size, player.y_pos * tile_size)
+        self.mr = ((player.x_pos + 1) * tile_size, player.y_pos * tile_size)
+        self.bl = ((player.x_pos - 1) * tile_size, (player.y_pos + 1) * tile_size)
+        self.bm = (player.x_pos * tile_size, (player.y_pos + 1) * tile_size)
+        self.br = ((player.x_pos + 1) * tile_size, (player.y_pos + 1) * tile_size)
+        
+    def draw(self, surf, tile_size):
+        surf.blit(self.tile_highlight, self.tl)
+        surf.blit(self.tile_highlight, self.tm)
+        surf.blit(self.tile_highlight, self.tr)
+        surf.blit(self.tile_highlight, self.ml)
+        surf.blit(self.tile_highlight, self.mm)
+        surf.blit(self.tile_highlight, self.mr)
+        surf.blit(self.tile_highlight, self.bl)
+        surf.blit(self.tile_highlight, self.bm)
+        surf.blit(self.tile_highlight, self.br)
+        surf.blit(self.tile_highlight_active, (self.tile_highlight_active_x * tile_size, self.tile_highlight_active_y * tile_size))
