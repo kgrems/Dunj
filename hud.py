@@ -74,20 +74,20 @@ class Hud:
             i += 1
             
         if self.player.weapon is not None:
-            displaysurf.blit(self.player.weapon.image_path, (self.weapon, mapheight*tilesize+self.height*tilesize-tilesize))
+            displaysurf.blit(self.player.weapon.base_image, (self.weapon, mapheight*tilesize+self.height*tilesize-tilesize))
     
         if self.player.armor_head is not None:
-            displaysurf.blit(self.player.armor_head.image_path, (self.head, mapheight*tilesize+self.height*tilesize-tilesize))
+            displaysurf.blit(self.player.armor_head.base_image, (self.head, mapheight*tilesize+self.height*tilesize-tilesize))
     
         if self.player.armor_chest is not None:
-            displaysurf.blit(self.player.armor_chest.image_path, (self.chest, mapheight*tilesize+self.height*tilesize-tilesize))
+            displaysurf.blit(self.player.armor_chest.base_image, (self.chest, mapheight*tilesize+self.height*tilesize-tilesize))
             
         if self.player.armor_legs is not None:
-            displaysurf.blit(self.player.armor_legs.image_path, (self.legs, mapheight*tilesize+self.height*tilesize-tilesize))
+            displaysurf.blit(self.player.armor_legs.base_image, (self.legs, mapheight*tilesize+self.height*tilesize-tilesize))
     
         if self.player.spell1 is not None:
-            displaysurf.blit(self.player.spell1.image_path, (self.spell1, mapheight*tilesize+self.height*tilesize-tilesize))
+            displaysurf.blit(self.player.spell1.base_image, (self.spell1, mapheight*tilesize+self.height*tilesize-tilesize))
     
         if self.player.spell2 is not None:
-            displaysurf.blit(self.player.spell2.image_path, (self.spell2, mapheight*tilesize+self.height*tilesize-tilesize))
+            displaysurf.blit(self.player.spell2.base_image, (self.spell2, mapheight*tilesize+self.height*tilesize-tilesize))
 

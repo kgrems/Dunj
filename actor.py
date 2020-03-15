@@ -1,22 +1,12 @@
 import pygame
-from colors import *
+from display_object import *
 
-class Actor(pygame.sprite.Sprite):
 
-    def __init__(self, name, x_pos, y_pos, size, hp, mp, str, defense, mag, gold, moves, direction, max_moves, max_hp, visible):
-    
-        #not using Sprite yet, but could be useful later
-        pygame.sprite.Sprite.__init__(self)
-        
-        self.image = pygame.Surface([size,size])
-        self.image.fill(Colors.RED)
-        
-        self.rect = self.image.get_rect()
-        
-        self.name = name
-        self.x_pos = x_pos
-        self.y_pos = y_pos
-        self.size = size
+class Actor(DisplayObject):
+
+    def __init__(self, name, x_pos, y_pos, size, hp, mp, str, defense, mag, gold, moves, direction, max_moves, max_hp, visible, image_path):
+        DisplayObject.__init__(self, name, x_pos, y_pos, size, visible, image_path)
+
         self.str = str
         self.defense = defense
         self.hp = hp
@@ -32,4 +22,3 @@ class Actor(pygame.sprite.Sprite):
         self.moves = moves
         self.max_moves = max_moves
         self.max_hp = max_hp
-        self.visible = visible

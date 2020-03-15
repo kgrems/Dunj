@@ -1,5 +1,6 @@
 from item import *
 
+
 class Health(Item):
     def __init__(self, x_pos, y_pos, size, name, image_path, visible, cost, data_symbol, inventory_thumb, hp_amount):
         Item.__init__(self, x_pos, y_pos, size, name, image_path, visible, cost, data_symbol, inventory_thumb)

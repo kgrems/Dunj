@@ -43,6 +43,7 @@ level1 = Level("1.lvl", MAPWIDTH, MAPHEIGHT, TILESIZE)
 
 DISPLAYSURF = pygame.display.set_mode((MAPWIDTH*TILESIZE, MAPHEIGHT*TILESIZE + HUD_HEIGHT*TILESIZE))
 
+
 game_controller = GameController()
 resources = Resources()
 loader = Loaders(resources, TILESIZE)
@@ -53,12 +54,11 @@ pygame.display.set_icon(resources.FAVICON)
 
 pygame.display.set_caption('Dunj')
 
-player = Player("Kevin", 1, 1, TILESIZE, 78, 34, 20, 22, 5, 10, 0, 7, 'd', 7, 100, 1, True)
+player = Player("Kevin", 1, 1, TILESIZE, 78, 34, 20, 22, 5, 10, 0, 7, 'd', 7, 100, 1, True, pygame.image.load('images/player/base/player.png').convert_alpha())
 player.up_img = resources.PLAYER_B_U
 player.down_img = resources.PLAYER_B_D
 player.left_img = resources.PLAYER_B_L
 player.right_img = resources.PLAYER_B_R
-
 
 hud = Hud(player)
 hud.draw(DISPLAYSURF, TILESIZE, MAPHEIGHT)
@@ -91,7 +91,8 @@ while True:
     
     # draw items
     for item in level1.items:
-        DISPLAYSURF.blit(item.image_path, (item.x_pos*TILESIZE, item.y_pos*TILESIZE))
+        item.draw(DISPLAYSURF)
+        #DISPLAYSURF.blit(item.image_path, (item.x_pos*TILESIZE, item.y_pos*TILESIZE))
 
     # draw enemies
     for enemy in level1.enemies:
@@ -101,9 +102,7 @@ while True:
     hud.draw(DISPLAYSURF, TILESIZE, MAPHEIGHT)
 
     for event in pygame.event.get():
-        pygame.event.set_blocked(pygame.MOUSEMOTION)
-        pygame.event.set_blocked(pygame.MOUSEBUTTONDOWN)
-        pygame.event.set_blocked(pygame.MOUSEBUTTONUP)
+        game_controller.disable_mouse()
 
         if event.type == QUIT:
             pygame.quit()

@@ -3,9 +3,9 @@ from actor import *
 
 class Enemy(Actor):
     def __init__(self, name, x_pos, y_pos, size, hp, mp, str, defense, mag, gold, moves, direction, max_moves, max_hp,
-                 xp_give, visible):
+                 xp_give, visible, image_path):
         Actor.__init__(self, name, x_pos, y_pos, size, hp, mp, str, defense, mag, gold, moves, direction, max_moves, max_hp,
-                       visible)
+                       visible, image_path)
 
         self.x_pos = x_pos
         self.y_pos = y_pos
