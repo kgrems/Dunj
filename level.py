@@ -42,16 +42,19 @@ class Level:
             i += 1
             j = 0
         
-    def draw_self(self, DISPLAYSURF):
+    def draw_self(self, surf):
         for row in range(self.map_height):
             for column in range(self.map_width):
-                DISPLAYSURF.blit(self.textures[self.tilemap[row][column]][0], (column*self.tile_size, row*self.tile_size, self.tile_size, self.tile_size))
+                surf.blit(self.textures[self.tilemap[row][column]][0], (column*self.tile_size, row*self.tile_size, self.tile_size, self.tile_size))
 
     def is_tile_passable_left(self, player):
         return self.textures[self.tilemap[player.y_pos][player.x_pos - 1]][1] == 1
+
     def is_tile_passable_right(self, player):
         return self.textures[self.tilemap[player.y_pos][player.x_pos + 1]][1] == 1
+
     def is_tile_passable_up(self, player):
         return self.textures[self.tilemap[player.y_pos - 1][player.x_pos]][1] == 1
+
     def is_tile_passable_down(self, player):
         return self.textures[self.tilemap[player.y_pos + 1][player.x_pos]][1] == 1

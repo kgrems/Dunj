@@ -23,13 +23,13 @@ class Enemy(Actor):
         self.left_img = None
         self.right_img = None
 
-    def draw_self(self, surf, tilesize):
-        pos = (self.x_pos*tilesize, self.y_pos*tilesize)
+    def draw(self, surf):
         if self.direction == 'd':
-            surf.blit(self.down_img, pos)
+            self.base_image = self.down_img
         elif self.direction == 'l':
-            surf.blit(self.left_img, pos)
+            self.base_image = self.left_img
         elif self.direction == 'r':
-            surf.blit(self.right_img, pos)
+            self.base_image = self.right_img
         elif self.direction == 'u':
-            surf.blit(self.up_img, pos)
+            self.base_image = self.up_img
+        DisplayObject.draw(self, surf)

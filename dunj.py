@@ -92,11 +92,10 @@ while True:
     # draw items
     for item in level1.items:
         item.draw(DISPLAYSURF)
-        #DISPLAYSURF.blit(item.image_path, (item.x_pos*TILESIZE, item.y_pos*TILESIZE))
 
     # draw enemies
     for enemy in level1.enemies:
-        enemy.draw_self(DISPLAYSURF, TILESIZE)
+        enemy.draw(DISPLAYSURF)
 
     # draw HUD
     hud.draw(DISPLAYSURF, TILESIZE, MAPHEIGHT)
