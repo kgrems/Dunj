@@ -67,7 +67,7 @@ class AttackGrid:
         self.bl = ((player.x_pos - 1) * tile_size, (player.y_pos + 1) * tile_size)
         self.bm = (player.x_pos * tile_size, (player.y_pos + 1) * tile_size)
         self.br = ((player.x_pos + 1) * tile_size, (player.y_pos + 1) * tile_size)
-        
+
     def draw(self, surf, tile_size):
         surf.blit(self.tile_highlight, self.tl)
         surf.blit(self.tile_highlight, self.tm)

@@ -229,7 +229,6 @@ while True:
                     attack_grid.tile_highlight_active_x = player.x_pos
                     attack_grid.tile_highlight_active_y = player.y_pos
 
-                    # calc attack grid cell positions
                     attack_grid.place(player, TILESIZE)
 
                     game_controller.action_key_pressed = True
