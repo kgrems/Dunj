@@ -3,7 +3,7 @@ import pygame
 
 class Level:
 
-    def __init__(self, file_name, MAPWIDTH, MAPHEIGHT, TILESIZE):
+    def __init__(self, file_name, map_width, map_height, tile_size):
         self.DIRT = 0
         self.GRASS = 1
         self.WATER = 2
@@ -12,10 +12,10 @@ class Level:
         self.LAVA = 5
     
         self.file_name = file_name
-        self.tilemap = [[None for w in range(MAPWIDTH)] for h in range(MAPHEIGHT)]
-        self.map_width = MAPWIDTH
-        self.map_height = MAPHEIGHT
-        self.tile_size = TILESIZE
+        self.tilemap = [[None for w in range(map_width)] for h in range(map_height)]
+        self.map_width = map_width
+        self.map_height = map_height
+        self.tile_size = tile_size
         
         self.items = []
         self.enemies = []
@@ -42,7 +42,7 @@ class Level:
             i += 1
             j = 0
         
-    def draw_self(self, surf):
+    def draw(self, surf):
         for row in range(self.map_height):
             for column in range(self.map_width):
                 surf.blit(self.textures[self.tilemap[row][column]][0], (column*self.tile_size, row*self.tile_size, self.tile_size, self.tile_size))

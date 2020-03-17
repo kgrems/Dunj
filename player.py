@@ -29,8 +29,8 @@ class Player(Actor):
 
         self.tile_attack_direction = ''
 
-    def draw_self(self, surf, tilesize):
-        pos = (self.x_pos*tilesize, self.y_pos*tilesize)
+    def draw_self(self, surf, tile_size):
+        pos = (self.x_pos * tile_size, self.y_pos * tile_size)
         if self.direction == 'd':
             surf.blit(self.down_img, pos)
             if self.armor_head is not None:

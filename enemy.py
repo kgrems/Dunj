@@ -1,9 +1,9 @@
 from actor import *
-
+from enums import MovementType
 
 class Enemy(Actor):
     def __init__(self, name, x_pos, y_pos, size, hp, mp, str, defense, mag, gold, moves, direction, max_moves, max_hp,
-                 xp_give, visible, image_path):
+                 xp_give, visible, image_path, movement_type):
         Actor.__init__(self, name, x_pos, y_pos, size, hp, mp, str, defense, mag, gold, moves, direction, max_moves, max_hp,
                        visible, image_path)
 
@@ -23,6 +23,7 @@ class Enemy(Actor):
         self.left_img = None
         self.right_img = None
 
+        self.movement_type = movement_type
     def draw(self, surf):
         if self.direction == 'd':
             self.base_image = self.down_img
@@ -33,3 +34,6 @@ class Enemy(Actor):
         elif self.direction == 'u':
             self.base_image = self.up_img
         DisplayObject.draw(self, surf)
+
+    '''def move(self):
+        if self.movement_type == MovementType.RANDOM:'''

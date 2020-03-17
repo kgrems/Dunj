@@ -87,7 +87,7 @@ hud_data_text = pygame.font.Font('fonts/ARCADE.TTF', 20)
 # MAIN GAME LOOP
 while True:
     pygame.mouse.set_visible(False)
-    level1.draw_self(DISPLAYSURF)
+    level1.draw(DISPLAYSURF)
     
     # draw items
     for item in level1.items:
