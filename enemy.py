@@ -1,5 +1,5 @@
 from actor import *
-from enums import MovementType
+from enums.movement_types import *
 
 class Enemy(Actor):
     def __init__(self, name, x_pos, y_pos, size, hp, mp, str, defense, mag, gold, moves, direction, max_moves, max_hp,
@@ -36,5 +36,7 @@ class Enemy(Actor):
             self.base_image = self.up_img
         DisplayObject.draw(self, surf)
 
-    '''def move(self):
-        if self.movement_type == MovementType.RANDOM:'''
+    def move(self):
+        if self.movement_type == MovementType.RANDOM:
+            print("Random Movement!")
+

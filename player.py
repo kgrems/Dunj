@@ -209,3 +209,8 @@ class Player(Actor):
                     self.attacking = False
                     self.attacking_forward = True
 
+    def can_attack(self, attack_grid, level):
+        if attack_grid.tile_attack_direction == 'ul' and level.is_tile_passable_tl(self):
+            return True
+        else:
+            return False
