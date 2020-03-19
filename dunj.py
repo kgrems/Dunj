@@ -114,7 +114,7 @@ while True:
 
                     if event.key == K_RIGHT:
                         player.direction = 'r'
-                        if player.x_pos + 1 < MAPWIDTH and level1.is_tile_passable_right(player) and player.moves > 0:
+                        if player.x_pos + 1 < MAPWIDTH and level1.is_tile_passable_mr(player) and player.moves > 0:
                             player.x_pos += 1
                             game_controller.action_key_pressed = True
                             player.moves -= 1
@@ -122,7 +122,7 @@ while True:
                             player.item_dropped = False
                     elif event.key == K_LEFT:
                         player.direction = 'l'
-                        if player.x_pos > 0 and level1.is_tile_passable_left(player) and player.moves > 0:
+                        if player.x_pos > 0 and level1.is_tile_passable_ml(player) and player.moves > 0:
                             player.x_pos -= 1
                             game_controller.action_key_pressed = True
                             player.moves -= 1
@@ -130,7 +130,7 @@ while True:
                             player.item_dropped = False
                     elif event.key == K_UP:
                         player.direction = 'u'
-                        if player.y_pos > 0 and level1.is_tile_passable_up(player) and player.moves > 0:
+                        if player.y_pos > 0 and level1.is_tile_passable_tm(player) and player.moves > 0:
                             player.y_pos -= 1
                             game_controller.action_key_pressed = True
                             player.moves -= 1
@@ -138,7 +138,7 @@ while True:
                             player.item_dropped = False
                     elif event.key == K_DOWN:
                         player.direction = 'd'
-                        if player.y_pos + 1 < MAPHEIGHT and level1.is_tile_passable_down(player) and player.moves > 0:
+                        if player.y_pos + 1 < MAPHEIGHT and level1.is_tile_passable_bm(player) and player.moves > 0:
                             player.y_pos += 1
                             game_controller.action_key_pressed = True
                             player.moves -= 1

@@ -21,13 +21,13 @@ class Loaders:
         self.armorc2 = Armor(8, 5, base_size, "Soft Wizard Armor", pygame.image.load('images/armor/c2/c2.png').convert_alpha(), True, 7, 'c2', pygame.image.load('images/armor/c2/c2.png').convert_alpha(), 7, 'c', resources.C2_U, resources.C2_D, resources.C2_L, resources.C2_R)
 
         #ENEMIES
-        self.skeleton1 = Enemy("Weak Skeleton", 10, 10, base_size, 100, 15, 10, 10, 13, 2, 5, 'd', 5, 10, 15, True, pygame.image.load('images/enemies/skeleton1.png').convert_alpha())
+        self.skeleton1 = Enemy("Weak Skeleton", 10, 10, base_size, 100, 15, 10, 10, 13, 2, 5, 'd', 5, 10, 15, True, pygame.image.load('images/enemies/skeleton1.png').convert_alpha(), MovementType.RANDOM)
         self.skeleton1.up_img = resources.SKELETON1_U
         self.skeleton1.down_img = resources.SKELETON1_D
         self.skeleton1.left_img = resources.SKELETON1_L
         self.skeleton1.right_img = resources.SKELETON1_R
         
-        self.skeleton2 = Enemy("Strong Skeleton", 10, 11, base_size, 300, 10, 12, 1, 3, 4, 4, 'u', 10, 30, 20, True, pygame.image.load('images/enemies/skeleton1.png').convert_alpha())
+        self.skeleton2 = Enemy("Strong Skeleton", 10, 11, base_size, 300, 10, 12, 1, 3, 4, 4, 'u', 10, 30, 20, True, pygame.image.load('images/enemies/skeleton1.png').convert_alpha(), MovementType.RANDOM)
         self.skeleton2.up_img = resources.SKELETON1_U
         self.skeleton2.down_img = resources.SKELETON1_D
         self.skeleton2.left_img = resources.SKELETON1_L
