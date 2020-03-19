@@ -17,10 +17,6 @@ enemies = pygame.sprite.Group()
 items = pygame.sprite.Group()
 tiles = pygame.sprite.Group()
 
-sound_enabled = False
-ai_delay = False
-input_lock = False
-attack_mode = False
 attack_variance_increase = False
 
 TILESIZE = 40
@@ -35,7 +31,6 @@ HELP_Y = 84
 FPS = 30
 fps = pygame.time.Clock()
 
-show_help = False
 player_turn = True
 collect_sound = pygame.mixer.Sound("sounds/collect_coin_01.wav")
 
@@ -109,7 +104,7 @@ while True:
     
         if player_turn:
             if event.type == KEYDOWN and game_controller.action_key_pressed is False:
-                if not game_controller.attack_mode and not show_help:
+                if not game_controller.attack_mode and not game_controller.show_help:
                     # only allow ANY player actions if there are moves left?
 
                     if event.key == K_RIGHT:
@@ -222,7 +217,7 @@ while True:
                         player.moves = player.max_moves
 
                 # in attack mode, use arrows to target enemy
-                elif game_controller.attack_mode and not show_help:
+                elif game_controller.attack_mode and not game_controller.show_help:
                     attack_grid.update(event, player, game_controller)
 
                 if event.key == K_e:
@@ -236,14 +231,14 @@ while True:
 
                 if event.key == K_SLASH:
                     game_controller.action_key_pressed = True
-                    show_help = not show_help
+                    game_controller.show_help = not game_controller.show_help
 
             if event.type == KEYUP:
                 game_controller.action_key_pressed = False
 
             # check player collision on level items
             for item in level1.items:
-                if player.x_pos == item.x_pos and player.y_pos == item.y_pos and not attack_mode:
+                if player.x_pos == item.x_pos and player.y_pos == item.y_pos and not game_controller.attack_mode:
 
                     if not isinstance(item, Weapon) and not isinstance(item, Armor):
                         pygame.mixer.Sound.play(collect_sound)
@@ -336,7 +331,7 @@ while True:
         else:
             DISPLAYSURF.blit(resources.PLEASE_WAIT, (((MAPWIDTH*TILESIZE)/2)-(resources.PLEASE_WAIT.get_width()/2),
                                            ((MAPHEIGHT*TILESIZE)/2)-resources.PLEASE_WAIT.get_height()/2))
-            ai_delay = True
+            game_controller.ai_delay = True
             player_turn = True
 
     if player.attacking:
@@ -370,13 +365,13 @@ while True:
     if game_controller.attack_mode:
         attack_grid.draw(DISPLAYSURF, TILESIZE)
 
-    if show_help:
+    if game_controller.show_help:
         DISPLAYSURF.blit(resources.HELP_SCREEN, (HELP_X, HELP_Y))
 
     pygame.display.update()
 
-    if ai_delay:
+    if game_controller.ai_delay:
         pygame.time.delay(2000)
-        ai_delay = False
+        game_controller.ai_delay = False
     
     fps.tick(FPS)

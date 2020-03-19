@@ -24,6 +24,7 @@ class Enemy(Actor):
         self.right_img = None
 
         self.movement_type = movement_type
+
     def draw(self, surf):
         if self.direction == 'd':
             self.base_image = self.down_img

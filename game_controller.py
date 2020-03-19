@@ -6,6 +6,10 @@ class GameController:
         self.action_key_pressed = False
         self.deal_damage = False
         self.attack_mode = False
+        self.ai_delay = False
+        self.input_lock = False
+        self.show_help = False
+        self.sound_enabled = False
 
     @staticmethod
     def disable_mouse():
