@@ -49,7 +49,7 @@ pygame.display.set_icon(resources.FAVICON)
 
 pygame.display.set_caption('Dunj')
 
-player = Player("Kevin", 1, 1, TILESIZE, 78, 34, 20, 22, 5, 10, 0, 7, 'd', 7, 100, 1, True, pygame.image.load('images/player/base/player.png').convert_alpha())
+player = Player("Kevin", 1, 1, TILESIZE, 78, 34, 20, 22, 5, 10, 0, 7, DirectionTypes.BOT_MID, 7, 100, 1, True, pygame.image.load('images/player/base/player.png').convert_alpha())
 player.up_img = resources.PLAYER_B_U
 player.down_img = resources.PLAYER_B_D
 player.left_img = resources.PLAYER_B_L
@@ -108,7 +108,7 @@ while True:
                     # only allow ANY player actions if there are moves left?
 
                     if event.key == K_RIGHT:
-                        player.direction = 'r'
+                        player.direction = DirectionTypes.MID_RIGHT
                         if player.x_pos + 1 < MAPWIDTH and level1.is_tile_passable_mr(player) and player.moves > 0:
                             player.x_pos += 1
                             game_controller.action_key_pressed = True
@@ -116,7 +116,7 @@ while True:
                             hud.system_message = 'Move right'
                             player.item_dropped = False
                     elif event.key == K_LEFT:
-                        player.direction = 'l'
+                        player.direction = DirectionTypes.MID_LEFT
                         if player.x_pos > 0 and level1.is_tile_passable_ml(player) and player.moves > 0:
                             player.x_pos -= 1
                             game_controller.action_key_pressed = True
@@ -124,7 +124,7 @@ while True:
                             hud.system_message = 'Move left'
                             player.item_dropped = False
                     elif event.key == K_UP:
-                        player.direction = 'u'
+                        player.direction = DirectionTypes.TOP_MID
                         if player.y_pos > 0 and level1.is_tile_passable_tm(player) and player.moves > 0:
                             player.y_pos -= 1
                             game_controller.action_key_pressed = True
@@ -132,7 +132,7 @@ while True:
                             hud.system_message = 'Move up'
                             player.item_dropped = False
                     elif event.key == K_DOWN:
-                        player.direction = 'd'
+                        player.direction = DirectionTypes.BOT_MID
                         if player.y_pos + 1 < MAPHEIGHT and level1.is_tile_passable_bm(player) and player.moves > 0:
                             player.y_pos += 1
                             game_controller.action_key_pressed = True

@@ -1,4 +1,5 @@
 from actor import *
+from enums.direction_types import DirectionTypes
 
 
 class Player(Actor):
@@ -22,6 +23,7 @@ class Player(Actor):
 
         self.current_attack_move_distance = 0
         self.max_attack_move_distance = 2
+
         # setting to decimal helps smooth the animation since its * by tilesize in the draw function
         self.attack_move_speed = 0.5
         self.attacking_forward = True
@@ -31,7 +33,7 @@ class Player(Actor):
 
     def draw_self(self, surf, tile_size):
         pos = (self.x_pos * tile_size, self.y_pos * tile_size)
-        if self.direction == 'd':
+        if self.direction == DirectionTypes.BOT_MID:
             surf.blit(self.down_img, pos)
             if self.armor_head is not None:
                 surf.blit(self.armor_head.d_img, pos)
@@ -41,7 +43,7 @@ class Player(Actor):
                 surf.blit(self.armor_legs.d_img, pos)
             if self.weapon is not None:
                 surf.blit(self.weapon.d_img, pos)
-        elif self.direction == 'l':
+        elif self.direction == DirectionTypes.MID_LEFT:
             surf.blit(self.left_img, pos)
             if self.armor_head is not None:
                 surf.blit(self.armor_head.l_img,pos)
@@ -51,7 +53,7 @@ class Player(Actor):
                 surf.blit(self.armor_legs.l_img, pos)
             if self.weapon is not None:
                 surf.blit(self.weapon.l_img, pos)
-        elif self.direction == 'r':
+        elif self.direction == DirectionTypes.MID_RIGHT:
             surf.blit(self.right_img, pos)
             if self.armor_head is not None:
                 surf.blit(self.armor_head.r_img, pos)
@@ -61,8 +63,8 @@ class Player(Actor):
                 surf.blit(self.armor_legs.r_img, pos)
             if self.weapon is not None:
                 surf.blit(self.weapon.r_img, pos)
-        elif self.direction == 'u':
-            surf.blit(self.up_img,pos)
+        elif self.direction == DirectionTypes.TOP_MID:
+            surf.blit(self.up_img, pos)
             if self.armor_head is not None:
                 surf.blit(self.armor_head.u_img, pos)
             if self.armor_chest is not None:
@@ -84,58 +86,58 @@ class Player(Actor):
         return result
 
     def drop_weapon(self):
-        if self.direction == 'u':
+        if self.direction == DirectionTypes.TOP_MID:
             self.weapon.x_pos = self.x_pos
             self.weapon.y_pos = self.y_pos + 1
-        elif self.direction == 'd':
+        elif self.direction == DirectionTypes.BOT_MID:
             self.weapon.x_pos = self.x_pos
             self.weapon.y_pos = self.y_pos - 1
-        elif self.direction == 'l':
+        elif self.direction == DirectionTypes.MID_LEFT:
             self.weapon.x_pos = self.x_pos + 1
             self.weapon.y_pos = self.y_pos
-        elif self.direction == 'r':
+        elif self.direction == DirectionTypes.MID_RIGHT:
             self.weapon.x_pos = self.x_pos - 1
             self.weapon.y_pos = self.y_pos
 
     def drop_armor_chest(self):
-        if self.direction == 'u':
+        if self.direction == DirectionTypes.TOP_MID:
             self.armor_chest.x_pos = self.x_pos
             self.armor_chest.y_pos = self.y_pos + 1
-        elif self.direction == 'd':
+        elif self.direction == DirectionTypes.BOT_MID:
             self.armor_chest.x_pos = self.x_pos
             self.armor_chest.y_pos = self.y_pos - 1
-        elif self.direction == 'l':
+        elif self.direction == DirectionTypes.MID_LEFT:
             self.armor_chest.x_pos = self.x_pos + 1
             self.armor_chest.y_pos = self.y_pos
-        elif self.direction == 'r':
+        elif self.direction == DirectionTypes.MID_RIGHT:
             self.armor_chest.x_pos = self.x_pos - 1
             self.armor_chest.y_pos = self.y_pos
 
     def drop_armor_head(self):
-        if self.direction == 'u':
+        if self.direction == DirectionTypes.TOP_MID:
             self.armor_head.x_pos = self.x_pos
             self.armor_head.y_pos = self.y_pos + 1
-        elif self.direction == 'd':
+        elif self.direction == DirectionTypes.BOT_MID:
             self.armor_head.x_pos = self.x_pos
             self.armor_head.y_pos = self.y_pos - 1
-        elif self.direction == 'l':
+        elif self.direction == DirectionTypes.MID_LEFT:
             self.armor_head.x_pos = self.x_pos + 1
             self.armor_head.y_pos = self.y_pos
-        elif self.direction == 'r':
+        elif self.direction == DirectionTypes.MID_RIGHT:
             self.armor_head.x_pos = self.x_pos - 1
             self.armor_head.y_pos = self.y_pos
 
     def drop_armor_legs(self):
-        if self.direction == 'u':
+        if self.direction == DirectionTypes.TOP_MID:
             self.armor_legs.x_pos = self.x_pos
             self.armor_legs.y_pos = self.y_pos + 1
-        elif self.direction == 'd':
+        elif self.direction == DirectionTypes.BOT_MID:
             self.armor_legs.x_pos = self.x_pos
             self.armor_legs.y_pos = self.y_pos - 1
-        elif self.direction == 'l':
+        elif self.direction == DirectionTypes.MID_LEFT:
             self.armor_legs.x_pos = self.x_pos + 1
             self.armor_legs.y_pos = self.y_pos
-        elif self.direction == 'r':
+        elif self.direction == DirectionTypes.MID_RIGHT:
             self.armor_legs.x_pos = self.x_pos - 1
             self.armor_legs.y_pos = self.y_pos
 
@@ -144,30 +146,30 @@ class Player(Actor):
     def attack_animation(self, attack_grid):
         if self.attacking:
             if self.attacking_forward:
-                if attack_grid.tile_attack_direction == 'ul':
+                if attack_grid.tile_attack_direction == DirectionTypes.TOP_LEFT:
                     self.x_pos -= self.attack_move_speed
                     self.y_pos -= self.attack_move_speed
-                elif attack_grid.tile_attack_direction == 'um':
-                    self.direction = 'u'
+                elif attack_grid.tile_attack_direction == DirectionTypes.TOP_MID:
+                    self.direction = DirectionTypes.TOP_MID
                     self.y_pos -= self.attack_move_speed
-                elif attack_grid.tile_attack_direction == 'ur':
+                elif attack_grid.tile_attack_direction == DirectionTypes.TOP_RIGHT:
                     self.x_pos += self.attack_move_speed
                     self.y_pos -= self.attack_move_speed
-                elif attack_grid.tile_attack_direction == 'ml':
-                    self.direction = 'l'
+                elif attack_grid.tile_attack_direction == DirectionTypes.MID_LEFT:
+                    self.direction = DirectionTypes.MID_LEFT
                     self.x_pos -= self.attack_move_speed
-                elif attack_grid.tile_attack_direction == 'mm':
+                elif attack_grid.tile_attack_direction == DirectionTypes.MID_MID:
                     print('dunno what to do here')
-                elif attack_grid.tile_attack_direction == 'mr':
-                    self.direction = 'r'
+                elif attack_grid.tile_attack_direction == DirectionTypes.MID_RIGHT:
+                    self.direction = DirectionTypes.MID_RIGHT
                     self.x_pos += self.attack_move_speed
-                elif attack_grid.tile_attack_direction == 'bl':
+                elif attack_grid.tile_attack_direction == DirectionTypes.BOT_LEFT:
                     self.x_pos -= self.attack_move_speed
                     self.y_pos += self.attack_move_speed
-                elif attack_grid.tile_attack_direction == 'bm':
-                    self.direction = 'd'
+                elif attack_grid.tile_attack_direction == DirectionTypes.BOT_MID:
+                    self.direction = DirectionTypes.BOT_MID
                     self.y_pos += self.attack_move_speed
-                elif attack_grid.tile_attack_direction == 'br':
+                elif attack_grid.tile_attack_direction == DirectionTypes.BOT_RIGHT:
                     self.x_pos += self.attack_move_speed
                     self.y_pos += self.attack_move_speed
 
@@ -176,30 +178,30 @@ class Player(Actor):
                 if self.current_attack_move_distance == self.max_attack_move_distance:
                     self.attacking_forward = False
             else:
-                if attack_grid.tile_attack_direction == 'ul':
+                if attack_grid.tile_attack_direction == DirectionTypes.TOP_LEFT:
                     self.x_pos += self.attack_move_speed
                     self.y_pos += self.attack_move_speed
-                elif attack_grid.tile_attack_direction == 'um':
-                    self.direction = 'u'
+                elif attack_grid.tile_attack_direction == DirectionTypes.TOP_MID:
+                    self.direction = DirectionTypes.TOP_MID
                     self.y_pos += self.attack_move_speed
-                elif attack_grid.tile_attack_direction == 'ur':
+                elif attack_grid.tile_attack_direction == DirectionTypes.TOP_RIGHT:
                     self.x_pos -= self.attack_move_speed
                     self.y_pos += self.attack_move_speed
-                elif attack_grid.tile_attack_direction == 'ml':
-                    self.direction = 'l'
+                elif attack_grid.tile_attack_direction == DirectionTypes.MID_LEFT:
+                    self.direction = DirectionTypes.MID_LEFT
                     self.x_pos += self.attack_move_speed
-                elif attack_grid.tile_attack_direction == 'mm':
+                elif attack_grid.tile_attack_direction == DirectionTypes.MID_MID:
                     print('dunno what to do here')
-                elif attack_grid.tile_attack_direction == 'mr':
-                    self.direction = 'r'
+                elif attack_grid.tile_attack_direction == DirectionTypes.MID_RIGHT:
+                    self.direction = DirectionTypes.MID_RIGHT
                     self.x_pos -= self.attack_move_speed
-                elif attack_grid.tile_attack_direction == 'bl':
+                elif attack_grid.tile_attack_direction == DirectionTypes.BOT_LEFT:
                     self.x_pos += self.attack_move_speed
                     self.y_pos -= self.attack_move_speed
-                elif attack_grid.tile_attack_direction == 'bm':
-                    self.direction = 'd'
+                elif attack_grid.tile_attack_direction == DirectionTypes.BOT_MID:
+                    self.direction = DirectionTypes.BOT_MID
                     self.y_pos -= self.attack_move_speed
-                elif attack_grid.tile_attack_direction == 'br':
+                elif attack_grid.tile_attack_direction == DirectionTypes.BOT_RIGHT:
                     self.x_pos -= self.attack_move_speed
                     self.y_pos -= self.attack_move_speed
 
@@ -210,7 +212,7 @@ class Player(Actor):
                     self.attacking_forward = True
 
     def can_attack(self, attack_grid, level):
-        if attack_grid.tile_attack_direction == 'ul' and level.is_tile_passable_tl(self):
+        if attack_grid.tile_attack_direction == DirectionTypes.TOP_LEFT and level.is_tile_passable_tl(self):
             return True
         else:
             return False

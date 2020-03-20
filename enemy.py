@@ -1,5 +1,7 @@
 from actor import *
 from enums.movement_types import *
+from enums.direction_types import DirectionTypes
+
 
 class Enemy(Actor):
     def __init__(self, name, x_pos, y_pos, size, hp, mp, str, defense, mag, gold, moves, direction, max_moves, max_hp,
@@ -26,13 +28,13 @@ class Enemy(Actor):
         self.movement_type = movement_type
 
     def draw(self, surf):
-        if self.direction == 'd':
+        if self.direction == DirectionTypes.BOT_MID:
             self.base_image = self.down_img
-        elif self.direction == 'l':
+        elif self.direction == DirectionTypes.MID_LEFT:
             self.base_image = self.left_img
-        elif self.direction == 'r':
+        elif self.direction == DirectionTypes.MID_RIGHT:
             self.base_image = self.right_img
-        elif self.direction == 'u':
+        elif self.direction == DirectionTypes.TOP_MID:
             self.base_image = self.up_img
         DisplayObject.draw(self, surf)
 
