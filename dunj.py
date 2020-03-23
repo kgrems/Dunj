@@ -17,8 +17,6 @@ enemies = pygame.sprite.Group()
 items = pygame.sprite.Group()
 tiles = pygame.sprite.Group()
 
-attack_variance_increase = False
-
 TILESIZE = 40
 MAPWIDTH = 40
 MAPHEIGHT = 18
@@ -224,7 +222,7 @@ while True:
                     attack_grid.tile_highlight_active_x = player.x_pos
                     attack_grid.tile_highlight_active_y = player.y_pos
 
-                    attack_grid.place(player, TILESIZE)
+                    attack_grid.place(player, TILESIZE, level1)
 
                     game_controller.action_key_pressed = True
                     game_controller.attack_mode = not game_controller.attack_mode
@@ -334,6 +332,7 @@ while True:
             game_controller.ai_delay = True
             player_turn = True
 
+    #Done getting input, do stuff...
     if player.attacking:
         player.attack_animation(attack_grid)
         player.draw_self(DISPLAYSURF, TILESIZE)
@@ -341,8 +340,7 @@ while True:
             if enemy.x_pos == attack_grid.tile_highlight_active_x and enemy.y_pos == attack_grid.tile_highlight_active_y and game_controller.deal_damage:
                 game_controller.deal_damage = False
                 if player.weapon is not None:
-                    attack_variance_increase = random.choice([True, False])
-                    if attack_variance_increase:
+                    if random.choice([True, False]):
                         damage = player.weapon.damage + int(player.weapon.damage * player.weapon.attack_variance)
                     else:
                         damage = player.weapon.damage - int(player.weapon.damage * player.weapon.attack_variance)
@@ -363,7 +361,7 @@ while True:
         player.draw_self(DISPLAYSURF, TILESIZE)
 
     if game_controller.attack_mode:
-        attack_grid.draw(DISPLAYSURF, TILESIZE)
+        attack_grid.draw(DISPLAYSURF, TILESIZE, player)
 
     if game_controller.show_help:
         DISPLAYSURF.blit(resources.HELP_SCREEN, (HELP_X, HELP_Y))

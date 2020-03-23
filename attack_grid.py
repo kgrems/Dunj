@@ -22,6 +22,16 @@ class AttackGrid:
         self.bm_pos = (0, 0)
         self.br_pos = (0, 0)
 
+        self.tl_active = False
+        self.tm_active = False
+        self.tr_active = False
+        self.ml_active = False
+        self.mm_active = False
+        self.mr_active = False
+        self.bl_active = False
+        self.bm_active = False
+        self.br_active = False
+
         self.tile_highlight = pygame.image.load('images/ground/highlight.png').convert_alpha()
         self.tile_highlight_active = pygame.image.load('images/ground/highlight_active.png').convert_alpha()
 
@@ -58,7 +68,7 @@ class AttackGrid:
             player.attacking = True
             game_controller.deal_damage = True
 
-    def place(self, player, tile_size):
+    def place(self, player, tile_size, level):
         self.tl_pos = ((player.x_pos - 1) * tile_size, (player.y_pos - 1) * tile_size)
         self.tm_pos = (player.x_pos * tile_size, (player.y_pos - 1) * tile_size)
         self.tr_pos = ((player.x_pos + 1) * tile_size, (player.y_pos - 1) * tile_size)
@@ -68,15 +78,46 @@ class AttackGrid:
         self.bl_pos = ((player.x_pos - 1) * tile_size, (player.y_pos + 1) * tile_size)
         self.bm_pos = (player.x_pos * tile_size, (player.y_pos + 1) * tile_size)
         self.br_pos = ((player.x_pos + 1) * tile_size, (player.y_pos + 1) * tile_size)
+        self.check_tiles_active(level, player)
 
     def draw(self, surf, tile_size):
-        surf.blit(self.tile_highlight, self.tl_pos)
-        surf.blit(self.tile_highlight, self.tm_pos)
-        surf.blit(self.tile_highlight, self.tr_pos)
-        surf.blit(self.tile_highlight, self.ml_pos)
-        surf.blit(self.tile_highlight, self.mm_pos)
-        surf.blit(self.tile_highlight, self.mr_pos)
-        surf.blit(self.tile_highlight, self.bl_pos)
-        surf.blit(self.tile_highlight, self.bm_pos)
-        surf.blit(self.tile_highlight, self.br_pos)
-        surf.blit(self.tile_highlight_active, (self.tile_highlight_active_x * tile_size, self.tile_highlight_active_y * tile_size))
+        if self.tl_active:
+            surf.blit(self.tile_highlight, self.tl_pos)
+        if self.tm_active:
+            surf.blit(self.tile_highlight, self.tm_pos)
+        if self.tr_active:
+            surf.blit(self.tile_highlight, self.tr_pos)
+        if self.ml_active:
+            surf.blit(self.tile_highlight, self.ml_pos)
+        if self.mm_active:
+            surf.blit(self.tile_highlight, self.mm_pos)
+        if self.mr_active:
+            surf.blit(self.tile_highlight, self.mr_pos)
+        if self.bl_active:
+            surf.blit(self.tile_highlight, self.bl_pos)
+        if self.bm_active:
+            surf.blit(self.tile_highlight, self.bm_pos)
+        if self.br_active:
+            surf.blit(self.tile_highlight, self.br_pos)
+        surf.blit(self.tile_highlight_active,
+                  (self.tile_highlight_active_x * tile_size, self.tile_highlight_active_y * tile_size))
+
+    def check_tiles_active(self, level, player):
+        if level.is_tile_passable_tl(player):
+            self.tl_active = True
+        if level.is_tile_passable_tm(player):
+            self.tm_active = True
+        if level.is_tile_passable_tr(player):
+            self.tr_active = True
+        if level.is_tile_passable_ml(player):
+            self.ml_active = True
+        if level.is_tile_passable_mm(player):
+            self.mm_active = True
+        if level.is_tile_passable_mr(player):
+            self.mr_active = True
+        if level.is_tile_passable_bl(player):
+            self.bl_active = True
+        if level.is_tile_passable_bm(player):
+            self.bm_active = True
+        if level.is_tile_passable_br(player):
+            self.br_active = True
